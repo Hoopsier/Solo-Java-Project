@@ -20,6 +20,9 @@ public class Controller {
   TextField delayField;
 
   @FXML
+  TextField customerQtt;
+
+  @FXML
   Button startBtn;
 
   @FXML
