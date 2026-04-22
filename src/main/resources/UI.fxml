@@ -51,11 +51,11 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox prefHeight="1082.0" prefWidth="1397.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="1082.0" prefWidth="1397.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <SplitPane dividerPositions="0.2967741935483871, 0.6258064516129033" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane maxWidth="411.0" minHeight="-Infinity" minWidth="411.0">
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="411.0" minHeight="-Infinity" minWidth="411.0">
           <children>
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Controller" textAlignment="CENTER" wrapText="false">
               <font>
@@ -102,9 +102,19 @@
                   </Label>
                   <Button layoutX="187.0" layoutY="459.0" mnemonicParsing="false" text="Increase Delay" />
                   <Button layoutX="29.0" layoutY="458.0" mnemonicParsing="false" text="Decrease Delay" />
+                  <TextField fx:id="customerQtt" layoutX="143.0" layoutY="189.0" prefHeight="26.0" prefWidth="196.0">
+                     <tooltip>
+                        <Tooltip text="Milliseconds per step" />
+                     </tooltip>
+                  </TextField>
+                  <Label layoutX="14.0" layoutY="193.0" text="Customers per step">
+                     <tooltip>
+                        <Tooltip text="Milliseconds per step" />
+                     </tooltip>
+                  </Label>
           </children>
         </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="443.0" SplitPane.resizableWithParent="false">
+          <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="443.0" SplitPane.resizableWithParent="false">
                <children>
                   <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Details" textAlignment="CENTER" wrapText="false">
                      <font>
@@ -128,9 +138,9 @@
                   </ScrollPane>
                </children>
             </AnchorPane>
-            <LineChart fx:id="dataGraph" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="492.0" prefWidth="469.0">
+            <LineChart fx:id="dataGraph" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="492.0" prefWidth="469.0" title="Data">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <CategoryAxis label="Time" side="BOTTOM" />
               </xAxis>
               <yAxis>
                 <NumberAxis side="LEFT" />
