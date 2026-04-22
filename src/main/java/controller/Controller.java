@@ -29,7 +29,7 @@ public class Controller {
       startBtn.setDisable(true);
       simulation.start();
     } catch (NumberFormatException e) {
-      detailsText.setText("Please use whole numbers and nothing else.\n".concat(detailsText.getText()));
+      detailsText.setText(Detailinator.parse("Please use whole numbers and nothing else.\n", detailsText.getText()));
     } catch (Exception e) {
       detailsText.setText(detailsText.getText().concat(e.toString()));
     }
