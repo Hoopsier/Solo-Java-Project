@@ -10,17 +10,15 @@ create table service_point(
   id int not null AUTO_INCREMENT,
   arrived int not null,
   serviced int not null,
-  active_time bigint not null,
-  total_time bigint not null,
+  active_time int not null,
+  total_time int not null,
   PRIMARY KEY(id)
 );
 
 create table customer(
   id int not null AUTO_INCREMENT,
   response_time int not null,
-  service_id int,
-  PRIMARY KEY(id),
-  FOREIGN KEY(service_id) REFERENCES service_point(id)
+  PRIMARY KEY(id)
 );
 
 -- NOTE: the following is an example of how to use the tables
@@ -33,8 +31,7 @@ INSERT INTO service_point (
 select * from service_point;
 
 INSERT INTO customer (
-  response_time,service_id
-) VALUES ( 123123, 1 );
+  response_time) VALUES ( 123123 );
 
 select * from customer;
 DELETE FROM customer;

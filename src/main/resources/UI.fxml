@@ -55,7 +55,7 @@
   <children>
     <SplitPane dividerPositions="0.2967741935483871, 0.6258064516129033" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-        <AnchorPane>
+        <AnchorPane maxWidth="411.0" minHeight="-Infinity" minWidth="411.0">
           <children>
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" minWidth="60.0" prefWidth="-1.0" style="&#10;" text="Controller" textAlignment="CENTER" wrapText="false">
               <font>
@@ -65,7 +65,7 @@
                 <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
               </textFill>
             </Label>
-                  <Button alignment="BOTTOM_RIGHT" layoutX="339.0" layoutY="459.0" mnemonicParsing="false" onAction="#startSimulation" text="Start">
+                  <Button fx:id="startBtn" alignment="BOTTOM_RIGHT" layoutX="339.0" layoutY="459.0" mnemonicParsing="false" onAction="#startSimulation" text="Start">
                      <tooltip>
                         <Tooltip text="Start the application" />
                      </tooltip>
