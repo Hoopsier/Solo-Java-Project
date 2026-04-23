@@ -11,7 +11,7 @@ public class EventQueue {
     tempQueue.addAll(eventQueue);
     while (!tempQueue.isEmpty()) {
       Event event = tempQueue.poll();
-      System.out.print(event.getTime() + " " + event.getServiceType() + ", ");
+      System.out.print(event.getTime() + " " + event.getEventType() + ", ");
     }
     System.out.println();
   }

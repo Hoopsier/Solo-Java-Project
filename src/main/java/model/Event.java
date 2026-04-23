@@ -1,13 +1,16 @@
 package model;
 
+import model.serviceObjects.ServicePointType;
+
 public class Event implements Comparable<Event> {
   private int time;
-  private ServiceType serviceType;
+  /// for ending service
+  private ServicePoint servicePoint;
   private EventType eventType;
 
-  public Event(int _time, EventType _eventType, ServiceType _serviceType) {
+  public Event(int _time, EventType _eventType, ServicePoint _servicePoint) {
     time = _time;
-    serviceType = _serviceType;
+    servicePoint = _servicePoint;
     eventType = _eventType;
   }
 
@@ -15,8 +18,12 @@ public class Event implements Comparable<Event> {
     return time;
   }
 
-  public ServiceType getServiceType() {
-    return serviceType;
+  public void callEndService() {
+    servicePoint.endService();
+  }
+
+  public ServicePoint getService() {
+    return servicePoint;
   }
 
   public EventType getEventType() {

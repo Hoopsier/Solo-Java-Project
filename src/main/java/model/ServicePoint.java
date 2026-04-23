@@ -3,11 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.serviceObjects.ServicePointType;
+
 /// This thread is started by instance.startThread(); instead of instance.start();
 public class ServicePoint extends Thread {
   private int arrived = 0;
   private int served = 0;
-  private int customerWaitTime;
+  private int customerWaitTime = -1;
   private List<Integer> customerWait = new ArrayList<>();
   /// delta time time active
   private int activeTime = 0;
@@ -16,30 +18,33 @@ public class ServicePoint extends Thread {
   /// how long the service will take
   private final int SERVICETIME;
 
-  protected Simulation simulation;
-  protected ServiceType serviceType; // TODO: implement usage
+  private Simulation simulation;
+  private ServicePointType nextService;
 
-  public ServicePoint(Simulation simulation, ServiceType _serviceType) {
+  public ServicePoint(Simulation simulation, ServicePointType _nextService) {
     STARTTIME = simulation.getTime();
     SERVICETIME = 5;
-    constructionHelper(simulation, _serviceType);
+    nextService = _nextService;
+    constructionHelper(simulation);
   }
 
-  public ServicePoint(Simulation simulation, ServiceType _serviceType, int _serviceTime) {
+  public ServicePoint(Simulation simulation, int _serviceTime) {
     STARTTIME = simulation.getTime();
     SERVICETIME = _serviceTime;
-    constructionHelper(simulation, _serviceType);
+    constructionHelper(simulation);
   }
 
-  private void constructionHelper(Simulation simulation, ServiceType _serviceType) {
-    continueTime = simulation.getTime();
-    this.simulation = simulation;
-    serviceType = _serviceType;
+  private void constructionHelper(Simulation _simulation) {
+    continueTime = _simulation.getTime();
+    simulation = _simulation;
   }
 
-  /// This is called whenever a customer arrives.
+  /// Please call startThread instead.
   public void run() {
     System.out.println("Thread started!");
+    if (customerWaitTime < 0) {
+      return;
+    }
     if (isActive() < 0) {
       startService();
       return;
@@ -47,23 +52,20 @@ public class ServicePoint extends Thread {
     endService();
   }
 
-  /// This method contains custom variables, that need to be updated every time
-  /// the thread starts. This is like this, for code localization reasons.
-  public void startThread(int _customerWaitTime) {
-    customerWaitTime = _customerWaitTime;
-    this.start();
-  }
-
   private void startService() {
     arrived++;
-    // TODO: Schedule end time
+    ServicePoint nextPoint = nextService.getNextService();
+    int nextTime = simulation.getTime() + SERVICETIME;
+    Simulation.addToAQueue(nextTime);
+    Simulation.addToBQueue(new Event(nextTime, EventType.BE, this));
   }
 
   /// This is called at the end of serving a customer
-  private void endService() {
+  public void endService() {
     served++;
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
-    customerWait.add(customerWaitTime);
+    customerWait.add(customerWaitTime + SERVICETIME);
+    // TODO: nextPoint is set up, so go to its router's queue
   }
 
   /// For isActive check, use == 0
@@ -89,7 +91,8 @@ public class ServicePoint extends Thread {
     return activeTime;
   }
 
-  public ServiceType getServiceType() {
-    return serviceType;
+  public void setWaitTime(int _waitTime) {
+    customerWaitTime = _waitTime;
   }
+
 }
