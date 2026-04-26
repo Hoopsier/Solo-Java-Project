@@ -11,7 +11,7 @@ public class EventQueue {
     tempQueue.addAll(eventQueue);
     while (!tempQueue.isEmpty()) {
       Event event = tempQueue.poll();
-      System.out.print(event.getTime() + " " + event.getEventType() + ", ");
+      System.out.print(event.getTime() + ", ");
     }
     System.out.println();
   }
@@ -20,6 +20,10 @@ public class EventQueue {
   /// otherwise returns the first in queue and removes it from the queue
   public synchronized Event progress() {
     return eventQueue.poll();
+  }
+
+  public synchronized Event peek() {
+    return eventQueue.peek();
   }
 
   public synchronized void addToQueue(Event event) {

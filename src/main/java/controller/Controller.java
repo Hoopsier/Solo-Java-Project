@@ -31,11 +31,17 @@ public class Controller {
       simulation = new Simulation(this, Integer.parseInt(runtimeField.getText()));
       startBtn.setDisable(true);
       simulation.start();
+      simulation.join();
+      startBtn.setDisable(false);
     } catch (NumberFormatException e) {
-      detailsText.setText(Detailinator.parse("Please use whole numbers and nothing else.\n", detailsText.getText()));
+      addDetails("Please use whole numbers and nothing else.");
     } catch (Exception e) {
-      detailsText.setText(detailsText.getText().concat(e.toString()));
+      addDetails(e.toString());
     }
+  }
+
+  public void addDetails(String text) {
+    detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText()));
   }
 
   @FXML

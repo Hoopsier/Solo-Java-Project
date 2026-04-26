@@ -3,10 +3,13 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
 
 /// This thread is started by instance.startThread(); instead of instance.start();
 public class ServicePoint extends Thread {
+  private static int _id;
+  private int id;
   private int arrived = 0;
   private int served = 0;
   private int customerWaitTime = -1;
@@ -19,32 +22,32 @@ public class ServicePoint extends Thread {
   private final int SERVICETIME;
 
   private Simulation simulation;
-  private ServicePointType nextService;
+  private int nextServiceCount;
+  private ServicePoint nextPoint;
 
-  public ServicePoint(Simulation simulation, ServicePointType _nextService) {
-    STARTTIME = simulation.getTime();
-    SERVICETIME = 5;
-    nextService = _nextService;
-    constructionHelper(simulation);
-  }
-
-  public ServicePoint(Simulation simulation, int _serviceTime) {
+  public ServicePoint(Simulation _simulation, int _serviceTime, int _nextServiceCount) {
     STARTTIME = simulation.getTime();
     SERVICETIME = _serviceTime;
-    constructionHelper(simulation);
-  }
-
-  private void constructionHelper(Simulation _simulation) {
+    nextServiceCount = _nextServiceCount;
+    setId();
     continueTime = _simulation.getTime();
     simulation = _simulation;
   }
 
-  /// Please call startThread instead.
+  private synchronized void setId() {
+    id = _id++;
+  }
+
+  public int getSPId() {
+    return id;
+  }
+
   public void run() {
     System.out.println("Thread started!");
     if (customerWaitTime < 0) {
       return;
     }
+    // this means it is active
     if (isActive() < 0) {
       startService();
       return;
@@ -52,23 +55,25 @@ public class ServicePoint extends Thread {
     endService();
   }
 
+  /** B1, 2 or 3 (start activity) */
   private void startService() {
     arrived++;
-    ServicePoint nextPoint = nextService.getNextService();
+    nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
     int nextTime = simulation.getTime() + SERVICETIME;
-    Simulation.addToAQueue(nextTime);
-    Simulation.addToBQueue(new Event(nextTime, EventType.BE, this));
+    Simulation.scheduleA(nextTime);
+    Simulation.scheduleB(new Event(nextTime, this));
   }
 
-  /// This is called at the end of serving a customer
+  /** B5,6,7 (finish activity) */
   public void endService() {
     served++;
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
     customerWait.add(customerWaitTime + SERVICETIME);
     // TODO: nextPoint is set up, so go to its router's queue
+    // sim.addC nextPoint
   }
 
-  /// For isActive check, use == 0
+  /** For isActive check, use == 0 */
   private int isActive() {
     return simulation.getTime() - (continueTime + SERVICETIME); // current time 5, continuetime 0, service time 5,
                                                                 // returns zero (which means it's free)
@@ -93,6 +98,10 @@ public class ServicePoint extends Thread {
 
   public void setWaitTime(int _waitTime) {
     customerWaitTime = _waitTime;
+  }
+
+  public int getServiceCount() {
+    return nextServiceCount;
   }
 
 }
