@@ -7,7 +7,7 @@ import model.ServicePoint;
 import model.Simulation;
 
 public class ServicePointTree {
-  private ServicePoint self; // TODO: make this a tuple of sp sp
+  private ServicePoint self;
   private List<ServicePointTree> children = new ArrayList<>();
   private int depth;
 
@@ -17,19 +17,25 @@ public class ServicePointTree {
 
     switch (depth) {
       case 1:
+        int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
+                                                             // matrixes in params apparently
         for (int i = 0; i < 5; i++) {
-          children.add(new ServicePointTree(new ServicePoint(simulation, 2, 2), 2, simulation));
+          children.add(new ServicePointTree(new ServicePoint(simulation, 2, odds), 2, simulation));
         }
         return;
       case 2:
+        int[][] odds2 = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
+                                                              // matrixes in params apparently
         for (int i = 0; i < 2; i++) {
           // TODO: make -1 serviceCount do the 20 predefined sps
-          children.add(new ServicePointTree(new ServicePoint(simulation, 6, -1), 3, simulation));
+          children.add(new ServicePointTree(new ServicePoint(simulation, 6, odds2), 3, simulation));
         }
         return;
       case 3:
+        int[][] odds3 = { { 100, 0 } }; // this one is here because parser fails at constant matrixes in params
+                                        // apparently
         for (int i = 0; i < 5; i++) {
-          children.add(new ServicePointTree(new ServicePoint(simulation, 10, 0), 4, simulation));
+          children.add(new ServicePointTree(new ServicePoint(simulation, 10, odds3), 4, simulation));
         }
         return;
     }

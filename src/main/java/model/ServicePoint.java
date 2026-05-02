@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
@@ -22,16 +23,28 @@ public class ServicePoint extends Thread {
   private final int SERVICETIME;
 
   private Simulation simulation;
-  private int nextServiceCount;
+  private int[][] branchOdds;
   private ServicePoint nextPoint;
+  private ServicePoint[] parallelPoints;
 
-  public ServicePoint(Simulation _simulation, int _serviceTime, int _nextServiceCount) {
-    STARTTIME = simulation.getTime();
+  public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
+    STARTTIME = _simulation.getTime();
     SERVICETIME = _serviceTime;
-    nextServiceCount = _nextServiceCount;
+    branchOdds = _branchOdds;
     setId();
     continueTime = _simulation.getTime();
     simulation = _simulation;
+  }
+
+  public synchronized void setParallels(int quantity) {
+    Random random = new Random();
+    for (int i = 0; i < quantity; i++) {
+      parallelPoints[i] = new ServicePoint(simulation, SERVICETIME + random.nextInt(-2, 2), branchOdds);
+    }
+  }
+
+  public synchronized ServicePoint[] getParallels() {
+    return parallelPoints;
   }
 
   private synchronized void setId() {
@@ -48,7 +61,7 @@ public class ServicePoint extends Thread {
       return;
     }
     // this means it is active
-    if (isActive() < 0) {
+    if (isActive() <= 0) {
       startService();
       return;
     }
@@ -74,7 +87,7 @@ public class ServicePoint extends Thread {
   }
 
   /** For isActive check, use == 0 */
-  private int isActive() {
+  public int isActive() {
     return simulation.getTime() - (continueTime + SERVICETIME); // current time 5, continuetime 0, service time 5,
                                                                 // returns zero (which means it's free)
                                                                 // while returning more than zero if something is wrong
@@ -101,7 +114,7 @@ public class ServicePoint extends Thread {
   }
 
   public int getServiceCount() {
-    return nextServiceCount;
+    return branchOdds;
   }
 
 }
