@@ -38,35 +38,38 @@ public class Simulation extends Thread {
   }
 
   public void run() {
+    try {
+      viewController.addDetails("Started~!");
+      scheduleA(5);
+      // loaded here in order to not lag the app (this creates the entire tree of
+      // around 1000-2000 objects)
+      int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
+      root = new ServicePointTree(
+          new ServicePoint(this, 1, rootBranchOdds), 1, this);
+      customerGenerator();
 
-    viewController.addDetails("Started~!");
-    scheduleA(5);
-    // loaded here in order to not lag the app (this creates the entire tree of
-    // around 1000-2000 objects)
-    int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
-    root = new ServicePointTree(
-        new ServicePoint(this, 1, rootBranchOdds), 1, this);
-    customerGenerator();
+      while (time < MAXTIME) {
 
-    while (time < MAXTIME) {
+        time = APhase.activate(sortedTimeAdvanceSet);
+        viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
+        BPhase.activate(serviceStartOrEndEvents, time);
+        viewController.addDetails("BQueue passed");
 
-      time = APhase.activate(sortedTimeAdvanceSet);
-      viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
-      BPhase.activate(serviceStartOrEndEvents, time);
-      viewController.addDetails("BQueue passed");
+        while (CPhase.activate(routingEvents, time))
+          System.out.print(""); // Just in case the optimizer skips this loop
 
-      while (CPhase.activate(routingEvents, time))
-        System.out.print(""); // Just in case the optimizer skips this loop
+        viewController.addDetails("CQueues passed");
 
-      viewController.addDetails("CQueues passed");
-
-      try {
-        Thread.sleep(1000);
-      } catch (InterruptedException e) {
-        viewController.addDetails("INTERRUPTED: " + e);
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          viewController.addDetails("INTERRUPTED: " + e);
+        }
       }
+      viewController.addDetails("DONE!!");
+    } finally {
+      viewController.onSimulationFinished();
     }
-    viewController.addDetails("DONE!!");
   }
 
   private void scheduleA(int time) {
