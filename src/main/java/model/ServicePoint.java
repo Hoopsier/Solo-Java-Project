@@ -73,8 +73,7 @@ public class ServicePoint extends Thread {
     arrived++;
     nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
     int nextTime = simulation.getTime() + SERVICETIME;
-    Simulation.scheduleA(nextTime);
-    Simulation.scheduleB(new Event(nextTime, this));
+    simulation.scheduleB(new Event(nextTime, this));
   }
 
   /** B5,6,7 (finish activity) */
@@ -113,7 +112,7 @@ public class ServicePoint extends Thread {
     customerWaitTime = _waitTime;
   }
 
-  public int getServiceCount() {
+  public int[][] getServiceCount() {
     return branchOdds;
   }
 

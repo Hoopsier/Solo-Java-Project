@@ -6,9 +6,9 @@ import java.util.Queue;
 public class EventQueue {
   private Queue<Event> eventQueue = new PriorityQueue<>();
 
-  public synchronized void readQueue() {
+  public synchronized void readQueue(int time) {
     Queue<Event> tempQueue = new PriorityQueue<>();
-    tempQueue.addAll(eventQueue);
+    tempQueue.addAll(eventQueue.stream().filter(e -> e.getTime() == time).toList());
     while (!tempQueue.isEmpty()) {
       Event event = tempQueue.poll();
       System.out.print(event.getTime() + ", ");

@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Arrays;
+
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
@@ -11,7 +13,10 @@ public class Controller {
   Simulation simulation;
 
   @FXML
-  TextField runtimeField;
+  TextField runtimeFieldM;
+
+  @FXML
+  TextField runtimeFieldH;
 
   @FXML
   TextField rushHoursField;
@@ -27,17 +32,24 @@ public class Controller {
 
   @FXML
   private void startSimulation() {
+    startBtn.setDisable(true);
     try {
-      simulation = new Simulation(this, Integer.parseInt(runtimeField.getText()));
-      startBtn.setDisable(true);
+      int[] rushHours = Arrays.stream(
+          rushHoursField.getText()
+              .split(","))
+          .mapToInt(s -> Integer.parseInt(s.trim()))
+          .toArray();
+      addDetails(Arrays.toString(rushHours));
+      simulation = new Simulation(this,
+          Integer.parseInt(runtimeFieldH.getText()) * 60 + Integer.parseInt(runtimeFieldM.getText()), rushHours);
       simulation.start();
       simulation.join();
-      startBtn.setDisable(false);
     } catch (NumberFormatException e) {
       addDetails("Please use whole numbers and nothing else.");
     } catch (Exception e) {
       addDetails(e.toString());
     }
+    startBtn.setDisable(false);
   }
 
   public void addDetails(String text) {

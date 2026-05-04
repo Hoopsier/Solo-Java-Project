@@ -6,7 +6,7 @@ import model.ServicePoint;
 
 public class CPhase {
   public static boolean activate(EventQueue CQueue, int time) {
-    CQueue.readQueue();
+    CQueue.readQueue(time);
     boolean touched = false;
     for (Event event = CQueue.peek(); event != null && event.getTime() == time; event = CQueue.peek()) {
       CQueue.progress();

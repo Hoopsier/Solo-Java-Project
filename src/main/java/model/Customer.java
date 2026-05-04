@@ -2,8 +2,13 @@ package model;
 
 public class Customer {
   int serviceTime = 0;
+  int arrivalTime;
 
-  Customer() {
+  Customer(int _arrivalTime) {
+    arrivalTime = _arrivalTime;
+  }
 
+  public void setServiceTime(int simTime) {
+    serviceTime = serviceTime - arrivalTime;
   }
 }

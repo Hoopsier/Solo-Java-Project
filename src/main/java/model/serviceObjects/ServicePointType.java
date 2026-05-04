@@ -25,17 +25,17 @@ public class ServicePointType {
     // TODO: route nextpoint with tree lookup
     ServicePoint result = root.find(service.getSPId()).getChild(roll(service.getServiceCount()));
     ServicePoint parallel = null;
-    if (result.isActive() > 0) {
-      for (ServicePoint point : result.getParallels()) {
-        if (point.isActive() > 0) {
-          continue;
-        }
-        parallel = point;
-        break;
-      }
-      return parallel;
+    if (result.isActive() <= 0) {
+      return result;
     }
-    return result;
+    for (ServicePoint point : result.getParallels()) {
+      if (point.isActive() > 0) {
+        continue;
+      }
+      parallel = point;
+      break;
+    }
+    return parallel;
   }
 
   /**
