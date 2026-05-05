@@ -22,14 +22,15 @@ public class ServicePointType {
    * @return ServicePoint to queue to, or null if everything is busy
    */
   public static synchronized ServicePoint getNextParallel(ServicePoint service, ServicePointTree root) {
-    // TODO: route nextpoint with tree lookup
+    System.out.println("starting rc find");
     ServicePoint result = root.find(service.getSPId()).getChild(roll(service.getServiceCount()));
-    ServicePoint parallel = null;
-    if (result.isActive() <= 0) {
+    System.out.println("ending rc find");
+    if (result.isActive() >= 0) {
       return result;
     }
+    ServicePoint parallel = null;
     for (ServicePoint point : result.getParallels()) {
-      if (point.isActive() > 0) {
+      if (point.isActive() < 0) {
         continue;
       }
       parallel = point;

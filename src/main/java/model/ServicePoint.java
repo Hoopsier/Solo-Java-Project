@@ -25,7 +25,7 @@ public class ServicePoint extends Thread {
   private Simulation simulation;
   private int[][] branchOdds;
   private ServicePoint nextPoint;
-  private ServicePoint[] parallelPoints;
+  private List<ServicePoint> parallelPoints = new ArrayList<>();
 
   public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
     STARTTIME = _simulation.getTime();
@@ -39,16 +39,23 @@ public class ServicePoint extends Thread {
   public synchronized void setParallels(int quantity) {
     Random random = new Random();
     for (int i = 0; i < quantity; i++) {
-      parallelPoints[i] = new ServicePoint(simulation, SERVICETIME + random.nextInt(-2, 2), branchOdds);
+      parallelPoints
+          .add(new ServicePoint(simulation, SERVICETIME + random.nextInt(-2, 2), branchOdds).setParallelId(id));
     }
   }
 
   public synchronized ServicePoint[] getParallels() {
-    return parallelPoints;
+    return (ServicePoint[]) parallelPoints.toArray();
   }
 
   private synchronized void setId() {
     id = _id++;
+  }
+
+  /***/
+  private synchronized ServicePoint setParallelId(int id) {
+    this.id = id;
+    return this;
   }
 
   public int getSPId() {
@@ -57,9 +64,6 @@ public class ServicePoint extends Thread {
 
   public void run() {
     System.out.println("Thread started!");
-    if (customerWaitTime < 0) {
-      return;
-    }
     // this means it is active
     if (isActive() <= 0) {
       startService();
@@ -86,7 +90,7 @@ public class ServicePoint extends Thread {
   }
 
   /** For isActive check, use == 0 */
-  public int isActive() {
+  public synchronized int isActive() {
     return simulation.getTime() - (continueTime + SERVICETIME); // current time 5, continuetime 0, service time 5,
                                                                 // returns zero (which means it's free)
                                                                 // while returning more than zero if something is wrong

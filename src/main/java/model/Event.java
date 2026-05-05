@@ -10,12 +10,12 @@ public class Event implements Comparable<Event> {
     servicePoint = _servicePoint;
   }
 
-  public int getTime() {
+  public synchronized int getTime() {
     return time;
   }
 
-  public void callEndService() {
-    servicePoint.endService();
+  public synchronized void setTime(int _time) {
+    time = _time;
   }
 
   public ServicePoint getService() {

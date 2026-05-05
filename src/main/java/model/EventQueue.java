@@ -11,9 +11,7 @@ public class EventQueue {
     tempQueue.addAll(eventQueue.stream().filter(e -> e.getTime() == time).toList());
     while (!tempQueue.isEmpty()) {
       Event event = tempQueue.poll();
-      System.out.print(event.getTime() + ", ");
     }
-    System.out.println();
   }
 
   /// returns null if event queue is empty

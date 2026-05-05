@@ -40,9 +40,8 @@ public class Simulation extends Thread {
   public void run() {
     try {
       viewController.addDetails("Started~!");
-      scheduleA(5);
-      // loaded here in order to not lag the app (this creates the entire tree of
-      // around 1000-2000 objects)
+      // loaded here in order to not lag the app
+      // (this creates the entire tree with a lot of objects)
       int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
       root = new ServicePointTree(
           new ServicePoint(this, 1, rootBranchOdds), 1, this);
@@ -52,16 +51,16 @@ public class Simulation extends Thread {
 
         time = APhase.activate(sortedTimeAdvanceSet);
         viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
-        BPhase.activate(serviceStartOrEndEvents, time);
-        viewController.addDetails("BQueue passed");
+        viewController
+            .addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
 
-        while (CPhase.activate(routingEvents, time))
+        while (CPhase.activate(routingEvents, this, time))
           System.out.print(""); // Just in case the optimizer skips this loop
 
         viewController.addDetails("CQueues passed");
 
         try {
-          Thread.sleep(1000);
+          Thread.sleep(500);
         } catch (InterruptedException e) {
           viewController.addDetails("INTERRUPTED: " + e);
         }
@@ -72,7 +71,7 @@ public class Simulation extends Thread {
     }
   }
 
-  private void scheduleA(int time) {
+  private synchronized void scheduleA(int time) {
     timeAdvanceSet.add(time);
     sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
     Collections.sort(sortedTimeAdvanceSet);
@@ -88,11 +87,11 @@ public class Simulation extends Thread {
     routingEvents.addToQueue(event);
   }
 
-  public int getTime() {
+  public synchronized int getTime() {
     return time;
   }
 
-  public ServicePointTree getServiceRoot() {
+  public synchronized ServicePointTree getServiceRoot() {
     return root;
   }
 
