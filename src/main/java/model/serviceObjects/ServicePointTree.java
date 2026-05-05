@@ -19,17 +19,22 @@ public class ServicePointTree {
       case 1:
         int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
                                                              // matrixes in params apparently
-        sp = new ServicePoint(simulation, 2, odds);
-        sp.setParallels(5);
-        children.add(new ServicePointTree(sp, 2, simulation));
+        // i is branch index
+        for (int i = 0; i < 3; i++) {
+          sp = new ServicePoint(simulation, 2, odds);
+          sp.setParallels(5);
+          children.add(new ServicePointTree(sp, 2, simulation));
+        }
         return;
       case 2:
         int[][] odds2 = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
                                                               // matrixes in params apparently
-        // TODO: make -1 serviceCount do the 20 predefined sps
-        sp = new ServicePoint(simulation, 6, odds2);
-        sp.setParallels(2);
-        children.add(new ServicePointTree(sp, 3, simulation));
+        // i is branch index
+        for (int i = 0; i < 2; i++) {
+          sp = new ServicePoint(simulation, 6, odds2);
+          sp.setParallels(2);
+          children.add(new ServicePointTree(sp, 3, simulation));
+        }
         return;
       case 3:
         int[][] odds3 = { { 100, 0 } }; // this one is here because parser fails at constant matrixes in params

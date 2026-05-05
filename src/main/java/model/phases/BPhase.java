@@ -11,6 +11,7 @@ public class BPhase {
     while (event != null && event.getTime() == time) {
       BQueue.progress();
       ServicePoint service = event.getService();
+      System.out.println(service.getState());
       service.start();
       count++;
       event = BQueue.peek();

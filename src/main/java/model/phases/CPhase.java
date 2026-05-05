@@ -8,7 +8,7 @@ import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
 
 public class CPhase {
-  public static boolean activate(EventQueue CQueue, Simulation simulation, int time) {
+  public static synchronized boolean activate(EventQueue CQueue, Simulation simulation, int time) {
     CQueue.readQueue(time);
     boolean touched = false;
     System.out.println("entering loop");
@@ -16,11 +16,14 @@ public class CPhase {
       CQueue.progress();
       touched = true;
       System.out.println("finding parallel");
-      ServicePoint service = ServicePointType.getNextParallel(event.getService(), simulation.getServiceRoot());
+      ServicePoint service = ServicePointType.getCurrentParallel(event.getService());
       System.out.println("found parallel");
       event.setTime(event.getTime() + 1);
       System.out.println("entering null check");
       if (service == null) {
+        if (event.getService().reserveTime(time)) {
+          continue;
+        }
         CQueue.addToQueue(event);
         System.out.println("was null");
         continue;

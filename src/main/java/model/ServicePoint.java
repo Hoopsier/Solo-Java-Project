@@ -1,8 +1,10 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
@@ -21,7 +23,7 @@ public class ServicePoint extends Thread {
   private int continueTime = 0;
   /// how long the service will take
   private final int SERVICETIME;
-
+  private Set<Integer> reservedTimes = new HashSet<>();
   private Simulation simulation;
   private int[][] branchOdds;
   private ServicePoint nextPoint;
@@ -44,8 +46,8 @@ public class ServicePoint extends Thread {
     }
   }
 
-  public synchronized ServicePoint[] getParallels() {
-    return (ServicePoint[]) parallelPoints.toArray();
+  public synchronized List<ServicePoint> getParallels() {
+    return parallelPoints;
   }
 
   private synchronized void setId() {
@@ -91,9 +93,25 @@ public class ServicePoint extends Thread {
 
   /** For isActive check, use == 0 */
   public synchronized int isActive() {
+    for (int t : reservedTimes) {
+      if (t == simulation.getTime()) {
+        return -1;
+      }
+    }
     return simulation.getTime() - (continueTime + SERVICETIME); // current time 5, continuetime 0, service time 5,
-                                                                // returns zero (which means it's free)
+                                                                // returns zero (which means it's free) more or equal to
+                                                                // zero is true
                                                                 // while returning more than zero if something is wrong
+  }
+
+  public synchronized boolean reserveTime(int time) {
+    for (int t : reservedTimes) {
+      if (t == time) {
+        return false;
+      }
+    }
+    reservedTimes.add(time);
+    return true;
   }
 
   public int getArrived() {
