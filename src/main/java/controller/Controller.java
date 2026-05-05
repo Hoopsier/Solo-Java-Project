@@ -2,6 +2,7 @@ package controller;
 
 import java.util.Arrays;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
@@ -43,17 +44,21 @@ public class Controller {
       simulation = new Simulation(this,
           Integer.parseInt(runtimeFieldH.getText()) * 60 + Integer.parseInt(runtimeFieldM.getText()), rushHours);
       simulation.start();
-      simulation.join();
     } catch (NumberFormatException e) {
       addDetails("Please use whole numbers and nothing else.");
+      startBtn.setDisable(false);
     } catch (Exception e) {
       addDetails(e.toString());
+      startBtn.setDisable(false);
     }
-    startBtn.setDisable(false);
   }
 
   public void addDetails(String text) {
-    detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText()));
+    Platform.runLater(() -> detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText())));
+  }
+
+  public void onSimulationFinished() {
+    Platform.runLater(() -> startBtn.setDisable(false));
   }
 
   @FXML
