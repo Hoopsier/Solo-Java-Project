@@ -6,14 +6,13 @@ import model.ServicePoint;
 public class ServicePointType {
 
   private static int roll(int[][] numberDistribution) {
-    int generatedAges[] = new int[numberDistribution.length + 1];
-
-    // Generate ages according to the distribution:
     int x = (int) (Math.random() * 100) + 1; // generate a random number 1..100 -> we get the row which gives the age
-    int j = 0;
-    while (x > numberDistribution[j][0])
-      j = generatedAges[numberDistribution[j][1]]; // search for the correct row to get the matching age
-    return j;
+    for (int[] row : numberDistribution) {
+      if (x <= row[0]) {
+        return row[1];
+      }
+    }
+    return numberDistribution[numberDistribution.length - 1][1];
   }
 
   /**
@@ -22,9 +21,12 @@ public class ServicePointType {
    * @return ServicePoint to queue to, or null if everything is busy
    */
   public static synchronized ServicePoint getNextParallel(ServicePoint service, ServicePointTree root) {
-    System.out.println("starting rc find");
-    ServicePoint result = root.find(service.getSPId()).getChild(roll(service.getServiceCount()));
-    System.out.println("ending rc find");
+    ServicePointTree current = root.find(service.getSPId());
+    if (current == null) {
+      return null;
+    }
+
+    ServicePoint result = current.getChild(roll(service.getServiceCount()));
     if (result.isActive() >= 0) {
       return result;
     }
@@ -47,7 +49,11 @@ public class ServicePointType {
    */
   public static synchronized ServicePoint getNextService(ServicePoint service, ServicePointTree root) {
     // TODO: route nextpoint with tree lookup
+    ServicePointTree current = root.find(service.getSPId());
+    if (current == null) {
+      return null;
+    }
 
-    return root.find(service.getSPId()).getChild(roll(service.getServiceCount()));
+    return current.getChild(roll(service.getServiceCount()));
   }
 }
