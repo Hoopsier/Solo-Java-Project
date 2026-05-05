@@ -46,16 +46,21 @@ public class ServicePointTree {
   }
 
   public ServicePointTree find(int target) {
+    if (self == null) {
+      return null;
+    }
+
     if (equals(target)) {
       return this;
     }
+
     for (ServicePointTree child : children) {
       ServicePointTree result = child.find(target);
       if (result != null) {
         return result;
       }
-      System.out.println("found nothing");
     }
+
     return null;
   }
 
