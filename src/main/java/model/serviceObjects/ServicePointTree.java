@@ -15,10 +15,10 @@ public class ServicePointTree {
     self = servicePoint;
     depth = _depth;
     ServicePoint sp;
+    boolean hasTierFour = false;
     switch (depth) {
       case 1:
-        int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
-                                                             // matrixes in params apparently
+        int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // three languages
         // i is branch index
         for (int i = 0; i < 3; i++) {
           sp = new ServicePoint(simulation, 2, odds);
@@ -27,21 +27,25 @@ public class ServicePointTree {
         }
         return;
       case 2:
-        int[][] odds2 = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // this one is here because parser fails at constant
-                                                              // matrixes in params apparently
+        int[][] odds2 = { { 70, 0 }, { 30, 1 } }; // 2 categories
         // i is branch index
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 3; i++) {
           sp = new ServicePoint(simulation, 6, odds2);
           sp.setParallels(2);
           children.add(new ServicePointTree(sp, 3, simulation));
         }
         return;
       case 3:
-        int[][] odds3 = { { 100, 0 } }; // this one is here because parser fails at constant matrixes in params
-                                        // apparently
+        int[][] odds3 = { { 100, 0 } }; // one set of 21 service points
         sp = new ServicePoint(simulation, 10, odds3);
-        sp.setParallels(20);
+        sp.setParallels(2);
         children.add(new ServicePointTree(sp, 4, simulation));
+        return;
+      case 4:
+        hasTierFour = true;
+        int[][] odds4 = {}; // doesn't have more children
+        sp = new ServicePoint(simulation, 10, odds4);
+        sp.setParallels(20);
         return;
     }
   }

@@ -1,14 +1,19 @@
 package model.serviceObjects;
 
+import java.util.Arrays;
+
 import model.ServicePoint;
 
 /// Sorry for the bad naming scheme, but I don't want to waste any more time refactoring rn.
 public class ServicePointType {
 
-  private static int roll(int[][] numberDistribution) {
+  private static synchronized int roll(int[][] numberDistribution) {
     int x = (int) (Math.random() * 100) + 1; // generate a random number 1..100 -> we get the row which gives the age
+    System.out.println(numberDistribution.length);
+    Arrays.stream(numberDistribution).forEach(nd -> System.out.println(Arrays.toString(nd)));
     for (int[] row : numberDistribution) {
       if (x <= row[0]) {
+        System.out.println("returning with lenght of" + row.length);
         return row[1];
       }
     }

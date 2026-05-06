@@ -56,7 +56,7 @@ public class ServicePoint {
     id = _id++;
   }
 
-  /***/
+  /** for parallels only */
   private synchronized ServicePoint setParallelId(int id) {
     this.id = id;
     return this;
@@ -88,7 +88,9 @@ public class ServicePoint {
     continueTime = simulation.getTime();
     reservedTimes.remove(simulation.getTime());
     busyUntil = simulation.getTime() + SERVICETIME;
-    nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
+    nextPoint = ServicePointType.getNextService(simulation.getServiceRoot().find(id).getSelf(),
+        simulation.getServiceRoot());
+    System.out.println("scheduled");
     simulation.scheduleB(new Event(busyUntil, this, Event.Type.END_SERVICE));
   }
 
