@@ -29,6 +29,7 @@ public class ServicePoint {
   private int[][] branchOdds;
   private ServicePoint nextPoint;
   private List<ServicePoint> parallelPoints = new ArrayList<>();
+  private int busyUntil = 0;
 
   public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
     STARTTIME = _simulation.getTime();
@@ -70,9 +71,8 @@ public class ServicePoint {
   }
 
   public void processBEvent() {
-    System.out.println("Thread started!");
-    // this means it is active
-    if (isActive() <= 0) {
+    // this means it is not active
+    if (isActive() >= 0) {
       startService();
       return;
     }
@@ -83,7 +83,7 @@ public class ServicePoint {
   private void startService() {
     arrived++;
     busy = true;
-    int busyUntil = simulation.getTime() + SERVICETIME;
+    busyUntil = simulation.getTime() + SERVICETIME;
     nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
     simulation.scheduleB(new Event(busyUntil, this)); // NOTE: why would it schedule the START of b? Should it just not
                                                       // be busy anymore?
@@ -96,6 +96,7 @@ public class ServicePoint {
     customerWait.add(customerWaitTime + SERVICETIME);
     // TODO: nextPoint is set up, so go to its router's queue
     // sim.addC nextPoint
+    simulation.scheduleC(new Event(busyUntil, nextPoint));
   }
 
   /** For isActive check, use == 0 */

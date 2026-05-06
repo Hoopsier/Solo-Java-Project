@@ -45,6 +45,7 @@ public class Simulation extends Thread {
       int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
       root = new ServicePointTree(
           new ServicePoint(this, 1, rootBranchOdds), 1, this);
+      viewController.addDetails(Integer.toString(root.serviceTotalCount()));
       customerGenerator();
 
       while (time < MAXTIME) {
@@ -60,7 +61,7 @@ public class Simulation extends Thread {
         viewController.addDetails("CQueues passed");
 
         try {
-          Thread.sleep(500);
+          Thread.sleep(50);
         } catch (InterruptedException e) {
           viewController.addDetails("INTERRUPTED: " + e);
         }

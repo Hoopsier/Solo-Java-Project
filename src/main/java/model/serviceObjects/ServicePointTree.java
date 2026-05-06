@@ -76,4 +76,12 @@ public class ServicePointTree {
   public ServicePoint getChild(int index) {
     return children.get(index).getSelf();
   }
+
+  public int serviceTotalCount() {
+    int sum = 1 + self.getParallels().size();
+    for (ServicePointTree child : children) {
+      sum += child.serviceTotalCount();
+    }
+    return sum;
+  }
 }
