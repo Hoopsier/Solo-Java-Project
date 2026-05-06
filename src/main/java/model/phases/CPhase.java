@@ -4,7 +4,6 @@ import model.Event;
 import model.EventQueue;
 import model.ServicePoint;
 import model.Simulation;
-import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
 
 public class CPhase {
@@ -14,12 +13,12 @@ public class CPhase {
     for (Event event = CQueue.peek(); event != null && event.getTime() == time; event = CQueue.peek()) {
       CQueue.progress();
       touched = true;
-      ServicePoint service = ServicePointType.getCurrentParallel(event.getService());
-      if (service == null) {
+      int startTime = event.getTime() + 1;
+      ServicePoint service = ServicePointType.getCurrentParallel(event.getService(), startTime);
+      if (service == null || !service.reserveTime(startTime)) {
         continue;
       }
-      event.setTime(event.getTime() + 1);
-      simulation.scheduleB(event);
+      simulation.scheduleB(new Event(startTime, service, Event.Type.START_SERVICE));
     }
     return touched;
   }

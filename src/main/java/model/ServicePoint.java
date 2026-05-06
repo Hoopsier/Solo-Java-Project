@@ -66,32 +66,37 @@ public class ServicePoint {
     return id;
   }
 
-  public boolean isBusy() {
+  public synchronized boolean isBusy() {
     return busy;
   }
 
-  public void processBEvent() {
-    // this means it is not active
-    if (isActive() >= 0) {
+  public synchronized void processBEvent(Event event) {
+    if (event.getType() == Event.Type.START_SERVICE) {
       startService();
       return;
     }
-    endService();
+
+    if (event.getType() == Event.Type.END_SERVICE) {
+      endService();
+    }
   }
 
   /** B1, 2 or 3 (start activity) */
   private void startService() {
     arrived++;
     busy = true;
+    continueTime = simulation.getTime();
+    reservedTimes.remove(simulation.getTime());
     busyUntil = simulation.getTime() + SERVICETIME;
     nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
-    simulation.scheduleB(new Event(busyUntil, this)); // NOTE: why would it schedule the START of b? Should it just not
-                                                      // be busy anymore?
+    simulation.scheduleB(new Event(busyUntil, this, Event.Type.END_SERVICE));
   }
 
   /** B5,6,7 (finish activity) */
   public void endService() {
     served++;
+    busy = false;
+    continueTime = simulation.getTime();
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
     customerWait.add(customerWaitTime + SERVICETIME);
     // TODO: nextPoint is set up, so go to its router's queue
@@ -101,15 +106,11 @@ public class ServicePoint {
 
   /** For isActive check, use == 0 */
   public synchronized int isActive() {
-    for (int t : reservedTimes) {
-      if (t == simulation.getTime()) {
-        return -1;
-      }
-    }
-    return simulation.getTime() - (continueTime + SERVICETIME); // current time 5, continuetime 0, service time 5,
-                                                                // returns zero (which means it's free) more or equal to
-                                                                // zero is true
-                                                                // while returning more than zero if something is wrong
+    return isAvailableAt(simulation.getTime()) ? 0 : -1;
+  }
+
+  public synchronized boolean isAvailableAt(int time) {
+    return !busy && !reservedTimes.contains(time);
   }
 
   public synchronized boolean reserveTime(int time) {
