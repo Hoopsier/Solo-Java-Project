@@ -1,7 +1,5 @@
 package model.serviceObjects;
 
-import org.checkerframework.checker.units.qual.s;
-
 import model.ServicePoint;
 
 /// Sorry for the bad naming scheme, but I don't want to waste any more time refactoring rn.
@@ -50,6 +48,21 @@ public class ServicePointType {
     ServicePoint parallel = null;
     for (ServicePoint point : service.getParallels()) {
       if (point.isActive() < 0) {
+        continue;
+      }
+      parallel = point;
+      break;
+    }
+    return parallel;
+  }
+
+  public static synchronized ServicePoint getCurrentParallel(ServicePoint service, int time) {
+    if (service.isAvailableAt(time)) {
+      return service;
+    }
+    ServicePoint parallel = null;
+    for (ServicePoint point : service.getParallels()) {
+      if (!point.isAvailableAt(time)) {
         continue;
       }
       parallel = point;
