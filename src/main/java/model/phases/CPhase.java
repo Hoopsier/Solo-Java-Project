@@ -18,16 +18,11 @@ public class CPhase {
       System.out.println("finding parallel");
       ServicePoint service = ServicePointType.getCurrentParallel(event.getService());
       System.out.println("found parallel");
-      event.setTime(event.getTime() + 1);
-      System.out.println("entering null check");
       if (service == null) {
-        if (event.getService().reserveTime(time)) {
-          continue;
-        }
-        CQueue.addToQueue(event);
         System.out.println("was null");
         continue;
       }
+      event.setTime(event.getTime() + 1);
       System.out.println("B scheduled");
       simulation.scheduleB(event);
     }

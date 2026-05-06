@@ -10,9 +10,10 @@ import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
 
 /// This thread is started by instance.startThread(); instead of instance.start();
-public class ServicePoint extends Thread {
+public class ServicePoint {
   private static int _id;
   private int id;
+  private boolean busy;
   private int arrived = 0;
   private int served = 0;
   private int customerWaitTime = -1;
@@ -64,7 +65,11 @@ public class ServicePoint extends Thread {
     return id;
   }
 
-  public void run() {
+  public boolean isBusy() {
+    return busy;
+  }
+
+  public void processBEvent() {
     System.out.println("Thread started!");
     // this means it is active
     if (isActive() <= 0) {
@@ -77,9 +82,11 @@ public class ServicePoint extends Thread {
   /** B1, 2 or 3 (start activity) */
   private void startService() {
     arrived++;
+    busy = true;
+    int busyUntil = simulation.getTime() + SERVICETIME;
     nextPoint = ServicePointType.getNextService(this, simulation.getServiceRoot());
-    int nextTime = simulation.getTime() + SERVICETIME;
-    simulation.scheduleB(new Event(nextTime, this));
+    simulation.scheduleB(new Event(busyUntil, this)); // NOTE: why would it schedule the START of b? Should it just not
+                                                      // be busy anymore?
   }
 
   /** B5,6,7 (finish activity) */
