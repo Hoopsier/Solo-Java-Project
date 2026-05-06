@@ -49,7 +49,7 @@ public class Simulation extends Thread {
 
       while (time < MAXTIME) {
 
-        time = APhase.activate(sortedTimeAdvanceSet);
+        time = advanceTime();
         viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
         viewController
             .addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
@@ -71,7 +71,22 @@ public class Simulation extends Thread {
     }
   }
 
+  private synchronized int advanceTime() {
+    sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
+    Collections.sort(sortedTimeAdvanceSet);
+
+    int nextTime = APhase.activate(sortedTimeAdvanceSet, time);
+    timeAdvanceSet.removeIf(scheduledTime -> scheduledTime <= nextTime);
+    sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
+    Collections.sort(sortedTimeAdvanceSet);
+    return nextTime;
+  }
+
   private synchronized void scheduleA(int time) {
+    if (time < this.time) {
+      return;
+    }
+
     timeAdvanceSet.add(time);
     sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
     Collections.sort(sortedTimeAdvanceSet);
