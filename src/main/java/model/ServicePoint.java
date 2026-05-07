@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import model.serviceObjects.ServicePointTree;
 import model.serviceObjects.ServicePointType;
 
 /// This thread is started by instance.startThread(); instead of instance.start();
@@ -103,7 +102,6 @@ public class ServicePoint {
   public void endService() {
     served++;
     busy = false;
-    continueTime = simulation.getTime();
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
     customerWait.add(customerWaitTime + SERVICETIME);
     if (isFourth) {

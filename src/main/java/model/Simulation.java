@@ -35,6 +35,7 @@ public class Simulation extends Thread {
     MAXTIME = _MAXTIME;
     rushHours = _rushHours;
     System.out.println("created");
+    viewController.enableButton();
   }
 
   public void run() {
@@ -45,7 +46,9 @@ public class Simulation extends Thread {
       int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
       root = new ServicePointTree(
           new ServicePoint(this, 1, rootBranchOdds), 1, this);
-      viewController.addDetails(Integer.toString(root.serviceTotalCount()));
+
+      // viewController.addDetails(Integer.toString(root.serviceTotalCount()));
+      root.printTree(1);
       customerGenerator();
 
       while (time < MAXTIME) {
@@ -68,7 +71,7 @@ public class Simulation extends Thread {
       }
       viewController.addDetails("DONE!!");
     } finally {
-      viewController.onSimulationFinished();
+      viewController.enableButton();
     }
   }
 

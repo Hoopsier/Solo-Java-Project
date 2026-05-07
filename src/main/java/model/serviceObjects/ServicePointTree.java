@@ -10,19 +10,23 @@ public class ServicePointTree {
   private ServicePoint self;
   private List<ServicePointTree> children = new ArrayList<>();
   private int depth;
+  private static ServicePointTree root;
+
+  private static int hasTierFour = -1;
 
   public ServicePointTree(ServicePoint servicePoint, int _depth, Simulation simulation) {
     self = servicePoint;
     depth = _depth;
     ServicePoint sp;
-    boolean hasTierFour = false;
     switch (depth) {
       case 1:
+        root = this;
         int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // three languages
+        self.setParallels(5);
         // i is branch index
         for (int i = 0; i < 3; i++) {
           sp = new ServicePoint(simulation, 2, odds);
-          sp.setParallels(5);
+          sp.setParallels(2);
           children.add(new ServicePointTree(sp, 2, simulation));
         }
         return;
@@ -31,31 +35,37 @@ public class ServicePointTree {
         // i is branch index
         for (int i = 0; i < 3; i++) {
           sp = new ServicePoint(simulation, 6, odds2);
-          sp.setParallels(2);
+          sp.setParallels(3);
           children.add(new ServicePointTree(sp, 3, simulation));
         }
         return;
       case 3:
         int[][] odds3 = { { 100, 0 } }; // one set of 21 service points
-        sp = new ServicePoint(simulation, 10, odds3);
-        sp.setParallels(2);
-        children.add(new ServicePointTree(sp, 4, simulation));
+        children.add(addFourth(simulation, odds3));
         return;
       case 4:
-        hasTierFour = true;
-        int[][] odds4 = {}; // doesn't have more children
-        sp = new ServicePoint(simulation, 10, odds4);
-        sp.setParallels(20);
-        sp.setFourth();
+        self.setParallels(20);
+        self.setFourth();
+        hasTierFour = self.getSPId();
         return;
     }
+  }
+
+  private synchronized ServicePointTree addFourth(Simulation simulation, int[][] odds) {
+    if (hasTierFour > -1) {
+      System.out
+          .println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + root.find(hasTierFour));
+      return root.find(hasTierFour);
+    }
+    ServicePoint sp = new ServicePoint(simulation, 10, odds);
+    return new ServicePointTree(sp, 4, simulation);
   }
 
   public boolean equals(int id) {
     return this.self.getSPId() == id;
   }
 
-  public ServicePointTree find(int target) {
+  public synchronized ServicePointTree find(int target) {
     if (self == null) {
       return null;
     }
@@ -95,5 +105,21 @@ public class ServicePointTree {
       sum += child.serviceTotalCount();
     }
     return sum;
+  }
+
+  public void printTree(int _depth) {
+    System.out.println(self.toString());
+    for (ServicePointTree branch : children) {
+      while (_depth > 0) {
+        System.out.print("-");
+        _depth--;
+      }
+      branch.printTree(_depth + 1);
+    }
+  }
+
+  // renamed to get just in case it overlaps with the self call for pointer field
+  public String getToString() {
+    return String.format("Depth: %d\nChild Count: %d\nPointer: %s", depth, children.size(), self);
   }
 }

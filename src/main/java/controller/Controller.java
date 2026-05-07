@@ -53,11 +53,11 @@ public class Controller {
     }
   }
 
-  public void addDetails(String text) {
+  public synchronized void addDetails(String text) {
     Platform.runLater(() -> detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText())));
   }
 
-  public void onSimulationFinished() {
+  public void enableButton() {
     Platform.runLater(() -> startBtn.setDisable(false));
   }
 
