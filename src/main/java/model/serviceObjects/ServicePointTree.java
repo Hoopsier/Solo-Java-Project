@@ -27,7 +27,7 @@ public class ServicePointTree {
         }
         return;
       case 2:
-        int[][] odds2 = { { 70, 0 }, { 30, 1 } }; // 2 categories
+        int[][] odds2 = { { 70, 0 }, { 100, 1 } }; // 2 categories
         // i is branch index
         for (int i = 0; i < 3; i++) {
           sp = new ServicePoint(simulation, 6, odds2);
@@ -46,6 +46,7 @@ public class ServicePointTree {
         int[][] odds4 = {}; // doesn't have more children
         sp = new ServicePoint(simulation, 10, odds4);
         sp.setParallels(20);
+        sp.setFourth();
         return;
     }
   }
@@ -78,7 +79,14 @@ public class ServicePointTree {
   }
 
   public ServicePoint getChild(int index) {
+    if (index < 0 || index >= children.size()) {
+      return null;
+    }
     return children.get(index).getSelf();
+  }
+
+  public boolean hasChildren() {
+    return !children.isEmpty();
   }
 
   public int serviceTotalCount() {

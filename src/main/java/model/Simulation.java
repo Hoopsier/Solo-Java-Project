@@ -103,6 +103,10 @@ public class Simulation extends Thread {
     routingEvents.addToQueue(event);
   }
 
+  public synchronized void addDetails(String text) {
+    viewController.addDetails(text);
+  }
+
   public synchronized int getTime() {
     return time;
   }

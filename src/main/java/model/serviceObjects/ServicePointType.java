@@ -8,6 +8,10 @@ import model.ServicePoint;
 public class ServicePointType {
 
   private static synchronized int roll(int[][] numberDistribution) {
+    if (numberDistribution.length == 0) {
+      return -1;
+    }
+
     int x = (int) (Math.random() * 100) + 1; // generate a random number 1..100 -> we get the row which gives the age
     System.out.println(numberDistribution.length);
     Arrays.stream(numberDistribution).forEach(nd -> System.out.println(Arrays.toString(nd)));
@@ -27,11 +31,15 @@ public class ServicePointType {
    */
   public static synchronized ServicePoint getNextParallel(ServicePoint service, ServicePointTree root) {
     ServicePointTree current = root.find(service.getSPId());
-    if (current == null) {
+    if (current == null || !current.hasChildren()) {
       return null;
     }
 
     ServicePoint result = current.getChild(roll(service.getServiceCount()));
+    if (result == null) {
+      return null;
+    }
+
     if (result.isActive() >= 0) {
       return result;
     }
@@ -85,7 +93,7 @@ public class ServicePointType {
   public static synchronized ServicePoint getNextService(ServicePoint service, ServicePointTree root) {
     // TODO: route nextpoint with tree lookup
     ServicePointTree current = root.find(service.getSPId());
-    if (current == null) {
+    if (current == null || !current.hasChildren()) {
       return null;
     }
 

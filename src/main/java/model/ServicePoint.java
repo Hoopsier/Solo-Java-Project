@@ -30,6 +30,7 @@ public class ServicePoint {
   private ServicePoint nextPoint;
   private List<ServicePoint> parallelPoints = new ArrayList<>();
   private int busyUntil = 0;
+  private boolean isFourth = false;
 
   public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
     STARTTIME = _simulation.getTime();
@@ -60,6 +61,10 @@ public class ServicePoint {
   private synchronized ServicePoint setParallelId(int id) {
     this.id = id;
     return this;
+  }
+
+  public void setFourth() {
+    isFourth = true;
   }
 
   public int getSPId() {
@@ -101,9 +106,15 @@ public class ServicePoint {
     continueTime = simulation.getTime();
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
     customerWait.add(customerWaitTime + SERVICETIME);
+    if (isFourth) {
+      simulation.addDetails("Phase 4 completed at service point " + id + " at time " + simulation.getTime()
+          + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
     // TODO: nextPoint is set up, so go to its router's queue
     // sim.addC nextPoint
-    simulation.scheduleC(new Event(busyUntil, nextPoint));
+    if (nextPoint != null) {
+      simulation.scheduleC(new Event(busyUntil, nextPoint));
+    }
   }
 
   /** For isActive check, use == 0 */
