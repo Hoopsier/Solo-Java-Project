@@ -3,36 +3,45 @@ package controller;
 import java.util.Arrays;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
+import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ValueAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import model.Simulation;
 
 public class Controller {
-  Simulation simulation;
+  private Simulation simulation;
 
   @FXML
-  TextField runtimeFieldM;
+  private TextField runtimeFieldM;
 
   @FXML
-  TextField runtimeFieldH;
+  private TextField runtimeFieldH;
 
   @FXML
-  TextField rushHoursField;
+  private TextField rushHoursField;
 
   @FXML
-  TextField delayField;
+  private TextField delayField;
 
   @FXML
-  TextField customerQtt;
+  private Text detailsText;
 
   @FXML
-  Button startBtn;
+  private AreaChart<Number, Number> dataGraph;
+
+  private XYChart.Series<Number, Number> data = new XYChart.Series<Number, Number>();
+  @FXML
+  private Button startBtn;
 
   @FXML
   private void startSimulation() {
+    clearGraph();
     startBtn.setDisable(true);
     try {
       int[] rushHours = Arrays.stream(
@@ -53,6 +62,13 @@ public class Controller {
     }
   }
 
+  public synchronized void addData(int time, int customers) {
+    Platform.runLater(() -> {
+      data.getData().add(new XYChart.Data<>(time, customers));
+      dataGraph.getData().add(data);
+    });
+  }
+
   public synchronized void addDetails(String text) {
     Platform.runLater(() -> detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText())));
   }
@@ -61,12 +77,10 @@ public class Controller {
     Platform.runLater(() -> startBtn.setDisable(false));
   }
 
-  @FXML
-  Text detailsText;
-
-  @FXML
-  LineChart<Double, Double> dataGraph;
-
   public Controller() {
+  }
+
+  private void clearGraph() {
+    data.getData().clear();
   }
 }

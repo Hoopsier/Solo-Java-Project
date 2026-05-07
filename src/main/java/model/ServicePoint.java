@@ -20,7 +20,6 @@ public class ServicePoint {
   /// delta time time active
   private int activeTime = 0;
   private final int STARTTIME;
-  private int continueTime = 0;
   /// how long the service will take
   private final int SERVICETIME;
   private Set<Integer> reservedTimes = new HashSet<>();
@@ -36,7 +35,6 @@ public class ServicePoint {
     SERVICETIME = _serviceTime;
     branchOdds = _branchOdds;
     setId();
-    continueTime = _simulation.getTime();
     simulation = _simulation;
   }
 
@@ -89,7 +87,6 @@ public class ServicePoint {
   private void startService() {
     arrived++;
     busy = true;
-    continueTime = simulation.getTime();
     reservedTimes.remove(simulation.getTime());
     busyUntil = simulation.getTime() + SERVICETIME;
     nextPoint = ServicePointType.getNextService(simulation.getServiceRoot().find(id).getSelf(),

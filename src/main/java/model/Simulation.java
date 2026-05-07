@@ -53,8 +53,6 @@ public class Simulation extends Thread {
       while (time < MAXTIME) {
         int prevTime = time;
         time = advanceTime();
-        if (prevTime == time) // very quick spot to loop in, however it is still **A** loop
-          continue;
         addDetails("Time advanced to (" + Integer.toString(time) + ")");
         addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
 
@@ -63,6 +61,7 @@ public class Simulation extends Thread {
 
         addDetails("CQueues passed");
 
+        viewController.addData(time, activeCount());
         try {
           Thread.sleep(50);
         } catch (InterruptedException e) {
@@ -78,6 +77,8 @@ public class Simulation extends Thread {
   }
 
   private synchronized int advanceTime() {
+    if (timeAdvanceSet.isEmpty())
+      return MAXTIME;
     sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
     Collections.sort(sortedTimeAdvanceSet);
 

@@ -124,4 +124,28 @@ public class ServicePointTree {
   public String getToString() {
     return String.format("Depth: %d\nChild Count: %d\nPointer: %s", depth, children.size(), self);
   }
+
+  public int getActiveServices() {
+    int count = self.isBusy() ? 1 : 0;
+    for (ServicePointTree child : children) {
+      count += child.getActiveServices();
+    }
+    return count;
+  }
+
+  public Number getAverageTime() {
+    int[] x = root.getAverageTimeHelper();
+    return x[1] / x[0];
+  }
+
+  public int[] getAverageTimeHelper() {
+    int count = 1;
+    int sum = self.getActiveTime();
+    for (ServicePointTree child : children) {
+      int[] data = child.getAverageTimeHelper();
+      count += data[0];
+      sum += data[1];
+    }
+    return new int[] { count, sum };
+  }
 }
