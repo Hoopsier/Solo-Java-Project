@@ -21,23 +21,21 @@ public class ServicePointTree {
     switch (depth) {
       case 1:
         root = this;
-        int[][] odds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // three languages
-        self.setParallels(5);
+        int[][] odds = { { 33, 0 }, { 100, 1 } }; // two categories each
+        self.setParallels(5); // 6 total
         // i is branch index
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 3; i++) { // three Languages
           sp = new ServicePoint(simulation, 2, odds);
-          sp.setParallels(2);
+          sp.setParallels(1); // 2 total
           children.add(new ServicePointTree(sp, 2, simulation));
         }
         return;
       case 2:
-        int[][] odds2 = { { 70, 0 }, { 100, 1 } }; // 2 categories
+        int[][] odds2 = { { 100, 0 } }; // 1 details each
         // i is branch index
-        for (int i = 0; i < 3; i++) {
-          sp = new ServicePoint(simulation, 6, odds2);
-          sp.setParallels(3);
-          children.add(new ServicePointTree(sp, 3, simulation));
-        }
+        sp = new ServicePoint(simulation, 6, odds2);
+        sp.setParallels(1); // 2 total
+        children.add(new ServicePointTree(sp, 3, simulation));
         return;
       case 3:
         int[][] odds3 = { { 100, 0 } }; // one set of 21 service points

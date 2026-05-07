@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
+import org.checkerframework.checker.units.qual.t;
 
 import controller.Controller;
 import model.phases.APhase;
@@ -43,7 +44,7 @@ public class Simulation extends Thread {
       viewController.addDetails("Started~!");
       // loaded here in order to not lag the app
       // (this creates the entire tree with a lot of objects)
-      int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };
+      int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // three languages each
       root = new ServicePointTree(
           new ServicePoint(this, 1, rootBranchOdds), 1, this);
 
@@ -52,8 +53,10 @@ public class Simulation extends Thread {
       customerGenerator();
 
       while (time < MAXTIME) {
-
+        int prevTime = time;
         time = advanceTime();
+        if (prevTime == time) // very quick spot to loop in, however it is still **A** loop
+          continue;
         viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
         viewController
             .addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
