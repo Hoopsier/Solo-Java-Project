@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
-import org.checkerframework.checker.units.qual.t;
 
 import controller.Controller;
 import model.phases.APhase;
@@ -36,12 +35,11 @@ public class Simulation extends Thread {
     MAXTIME = _MAXTIME;
     rushHours = _rushHours;
     System.out.println("created");
-    viewController.enableButton();
   }
 
   public void run() {
     try {
-      viewController.addDetails("Started~!");
+      addDetails("Started~!");
       // loaded here in order to not lag the app
       // (this creates the entire tree with a lot of objects)
       int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } }; // three languages each
@@ -57,24 +55,25 @@ public class Simulation extends Thread {
         time = advanceTime();
         if (prevTime == time) // very quick spot to loop in, however it is still **A** loop
           continue;
-        viewController.addDetails("Time advanced to (" + Integer.toString(time) + ")");
-        viewController
-            .addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
+        addDetails("Time advanced to (" + Integer.toString(time) + ")");
+        addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
 
         while (CPhase.activate(routingEvents, this, time))
           System.out.print(""); // Just in case the optimizer skips this loop
 
-        viewController.addDetails("CQueues passed");
+        addDetails("CQueues passed");
 
         try {
           Thread.sleep(50);
         } catch (InterruptedException e) {
-          viewController.addDetails("INTERRUPTED: " + e);
+          addDetails("INTERRUPTED: " + e);
         }
       }
-      viewController.addDetails("DONE!!");
+      addDetails("DONE!!");
     } finally {
-      viewController.enableButton();
+      if (viewController != null) {
+        viewController.enableButton();
+      }
     }
   }
 
@@ -110,7 +109,9 @@ public class Simulation extends Thread {
   }
 
   public synchronized void addDetails(String text) {
-    viewController.addDetails(text);
+    if (viewController != null) {
+      viewController.addDetails(text);
+    }
   }
 
   public synchronized int getTime() {
