@@ -91,7 +91,6 @@ public class ServicePoint {
     busyUntil = simulation.getTime() + SERVICETIME;
     nextPoint = ServicePointType.getNextService(simulation.getServiceRoot().find(id).getSelf(),
         simulation.getServiceRoot());
-    System.out.println("scheduled");
     simulation.scheduleB(new Event(busyUntil, this, Event.Type.END_SERVICE));
   }
 

@@ -74,8 +74,17 @@ public class Controller {
 
   public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
-      customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
-      averageServingTimeData.getData().add(new XYChart.Data<>(time, averageServingTime));
+      try {
+        customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
+      } catch (Exception e) {
+        System.err.println("this is busted at addData customersInSystem" + e);
+      }
+      try {
+        averageServingTimeData.getData().add(new XYChart.Data<>(time, averageServingTime));
+      } catch (Exception e) {
+        // Log error for average time data
+        System.err.println("this is busted at addData averageTime" + e);
+      }
     });
   }
 

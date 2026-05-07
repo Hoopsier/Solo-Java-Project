@@ -127,6 +127,9 @@ public class ServicePointTree {
 
   public int getActiveServices() {
     int count = self.isBusy() ? 1 : 0;
+    for (ServicePoint point : self.getParallels()) {
+      count += point.isBusy() ? 1 : 0;
+    }
     for (ServicePointTree child : children) {
       count += child.getActiveServices();
     }

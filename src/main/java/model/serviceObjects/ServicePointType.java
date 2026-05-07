@@ -13,11 +13,11 @@ public class ServicePointType {
     }
 
     int x = (int) (Math.random() * 100) + 1; // generate a random number 1..100 -> we get the row which gives the age
-    System.out.println(numberDistribution.length);
-    Arrays.stream(numberDistribution).forEach(nd -> System.out.println(Arrays.toString(nd)));
+    // System.out.println(numberDistribution.length);
+    // Arrays.stream(numberDistribution).forEach(nd ->
+    // System.out.println(Arrays.toString(nd)));
     for (int[] row : numberDistribution) {
       if (x <= row[0]) {
-        System.out.println("returning with lenght of" + row.length);
         return row[1];
       }
     }
