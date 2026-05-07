@@ -133,19 +133,37 @@ public class ServicePointTree {
     return count;
   }
 
-  public Number getAverageTime() {
-    int[] x = root.getAverageTimeHelper();
-    return x[1] / x[0];
+  public int getCustomersInSystem() {
+    int count = self.getCustomersInSystem();
+    for (ServicePoint point : self.getParallels()) {
+      count += point.getCustomersInSystem();
+    }
+    for (ServicePointTree child : children) {
+      count += child.getCustomersInSystem();
+    }
+    return count;
   }
 
-  public int[] getAverageTimeHelper() {
-    int count = 1;
-    int sum = self.getActiveTime();
-    for (ServicePointTree child : children) {
-      int[] data = child.getAverageTimeHelper();
-      count += data[0];
-      sum += data[1];
+  public double getAverageServingTime() {
+    int[] data = getServingTimeTotals();
+    if (data[1] == 0) {
+      return 0;
     }
-    return new int[] { count, sum };
+    return (double) data[0] / data[1];
+  }
+
+  private int[] getServingTimeTotals() {
+    int sum = self.getCompletedServingTime();
+    int count = self.getCompletedCustomerCount();
+    for (ServicePoint point : self.getParallels()) {
+      sum += point.getCompletedServingTime();
+      count += point.getCompletedCustomerCount();
+    }
+    for (ServicePointTree child : children) {
+      int[] data = child.getServingTimeTotals();
+      sum += data[0];
+      count += data[1];
+    }
+    return new int[] { sum, count };
   }
 }

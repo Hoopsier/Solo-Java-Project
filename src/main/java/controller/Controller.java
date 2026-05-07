@@ -3,11 +3,8 @@ package controller;
 import java.util.Arrays;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.ValueAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -35,7 +32,9 @@ public class Controller {
   @FXML
   private AreaChart<Number, Number> dataGraph;
 
-  private XYChart.Series<Number, Number> data = new XYChart.Series<Number, Number>();
+  private final XYChart.Series<Number, Number> customersInSystemData = new XYChart.Series<>();
+
+  private final XYChart.Series<Number, Number> averageServingTimeData = new XYChart.Series<>();
   @FXML
   private Button startBtn;
 
@@ -62,10 +61,21 @@ public class Controller {
     }
   }
 
-  public synchronized void addData(int time, int customers) {
+  @FXML
+  private void initialize() {
+    customersInSystemData.setName("Customers in system");
+    averageServingTimeData.setName("Average serving time");
+    dataGraph.setTitle("Simulation metrics by time step");
+    dataGraph.getXAxis().setLabel("Time step");
+    dataGraph.getYAxis().setLabel("Count / time steps");
+    dataGraph.setCreateSymbols(false);
+    clearGraph();
+  }
+
+  public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
-      data.getData().add(new XYChart.Data<>(time, customers));
-      dataGraph.getData().add(data);
+      customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
+      averageServingTimeData.getData().add(new XYChart.Data<>(time, averageServingTime));
     });
   }
 
@@ -81,6 +91,11 @@ public class Controller {
   }
 
   private void clearGraph() {
-    data.getData().clear();
+    customersInSystemData.getData().clear();
+    averageServingTimeData.getData().clear();
+
+    if (dataGraph != null) {
+      dataGraph.getData().setAll(customersInSystemData, averageServingTimeData);
+    }
   }
 }

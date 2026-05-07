@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.math3.distribution.ExponentialDistribution;
@@ -51,7 +50,6 @@ public class Simulation extends Thread {
       customerGenerator();
 
       while (time < MAXTIME) {
-        int prevTime = time;
         time = advanceTime();
         addDetails("Time advanced to (" + Integer.toString(time) + ")");
         addDetails("BQueue passed with " + BPhase.activate(serviceStartOrEndEvents, time) + " iterations");
@@ -61,7 +59,9 @@ public class Simulation extends Thread {
 
         addDetails("CQueues passed");
 
-        viewController.addData(time, activeCount());
+        if (viewController != null) {
+          viewController.addData(time, root.getCustomersInSystem(), root.getAverageServingTime());
+        }
         try {
           Thread.sleep(50);
         } catch (InterruptedException e) {

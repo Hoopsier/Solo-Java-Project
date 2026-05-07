@@ -147,6 +147,18 @@ public class ServicePoint {
     return activeTime;
   }
 
+  public int getCustomersInSystem() {
+    return arrived - served;
+  }
+
+  public int getCompletedServingTime() {
+    return activeTime;
+  }
+
+  public int getCompletedCustomerCount() {
+    return served;
+  }
+
   public void setWaitTime(int _waitTime) {
     customerWaitTime = _waitTime;
   }
