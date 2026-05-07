@@ -37,6 +37,17 @@ class ServicePointTreeTest {
     assertNull(ServicePointType.getNextService(terminalService, root));
   }
 
+  @Test
+  void buildingASecondTreeDoesNotReuseMissingTierFourBranch() {
+    ServicePointTree firstTree = createTree();
+    ServicePointTree secondTree = createTree();
+
+    assertNotNull(firstTree);
+    assertNotNull(secondTree);
+    assertNotNull(secondTree.find(secondTree.getChild(0).getSPId()));
+    secondTree.serviceTotalCount();
+  }
+
   private ServicePointTree createTree() {
     Simulation simulation = new Simulation(null, 10, new int[] {});
     int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };

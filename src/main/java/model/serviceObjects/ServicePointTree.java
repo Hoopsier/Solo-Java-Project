@@ -21,6 +21,7 @@ public class ServicePointTree {
     switch (depth) {
       case 1:
         root = this;
+        hasTierFour = -1;
         int[][] odds = { { 33, 0 }, { 100, 1 } }; // two categories each
         self.setParallels(5); // 6 total
         // i is branch index
@@ -51,10 +52,13 @@ public class ServicePointTree {
 
   private synchronized ServicePointTree addFourth(Simulation simulation, int[][] odds) {
     if (hasTierFour > -1) {
-      System.out
-          .println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + root.find(hasTierFour));
-      return root.find(hasTierFour);
+      ServicePointTree existingTierFour = root.find(hasTierFour);
+      if (existingTierFour != null) {
+        return existingTierFour;
+      }
+      hasTierFour = -1;
     }
+
     ServicePoint sp = new ServicePoint(simulation, 10, odds);
     return new ServicePointTree(sp, 4, simulation);
   }
