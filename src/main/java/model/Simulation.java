@@ -31,6 +31,7 @@ public class Simulation extends Thread {
   private int[] rushHours;
   private final List<Integer> customerResponseTimes = new ArrayList<>();
   private final SimulationResultRepository resultRepository = new SimulationResultRepository();
+  public int delay;
 
   public Simulation(Controller _controller, int _MAXTIME, int[] _rushHours) {
     viewController = _controller;
@@ -66,7 +67,7 @@ public class Simulation extends Thread {
           viewController.addData(time, getCustomersInSystem(), root.getAverageServingTime());
         }
         try {
-          Thread.sleep(50);
+          Thread.sleep(delay);
         } catch (InterruptedException e) {
           addDetails("INTERRUPTED: " + e);
         }
@@ -175,5 +176,17 @@ public class Simulation extends Thread {
         return true;
     }
     return false;
+  }
+
+  public synchronized void incDelay() {
+    delay *= 1.1;
+  }
+
+  public synchronized void decDelay() {
+    delay *= 0.9;
+  }
+
+  public void setDelay(int _delay) {
+    delay = _delay;
   }
 }

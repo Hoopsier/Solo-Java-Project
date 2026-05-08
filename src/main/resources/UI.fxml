@@ -99,18 +99,8 @@
                         <Tooltip text="Milliseconds per step" />
                      </tooltip>
                   </Label>
-                  <Button layoutX="187.0" layoutY="459.0" mnemonicParsing="false" text="Increase Delay" />
-                  <Button layoutX="29.0" layoutY="458.0" mnemonicParsing="false" text="Decrease Delay" />
-                  <TextField fx:id="customerQtt" layoutX="143.0" layoutY="236.0" prefHeight="26.0" prefWidth="196.0">
-                     <tooltip>
-                        <Tooltip text="Milliseconds per step" />
-                     </tooltip>
-                  </TextField>
-                  <Label layoutX="14.0" layoutY="240.0" text="Customers per step">
-                     <tooltip>
-                        <Tooltip text="Milliseconds per step" />
-                     </tooltip>
-                  </Label>
+                  <Button layoutX="187.0" layoutY="459.0" mnemonicParsing="false" onAction="#increaseDelay" text="Increase Delay" />
+                  <Button layoutX="29.0" layoutY="458.0" mnemonicParsing="false" onAction="#decreaseDelay" text="Decrease Delay" />
                   <Label layoutX="14.0" layoutY="103.0" text="Minutes to run">
                      <tooltip>
                         <Tooltip text="How many time steps that are simulated." />

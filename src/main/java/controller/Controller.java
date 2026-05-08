@@ -51,6 +51,7 @@ public class Controller {
       addDetails(Arrays.toString(rushHours));
       simulation = new Simulation(this,
           Integer.parseInt(runtimeFieldH.getText()) * 60 + Integer.parseInt(runtimeFieldM.getText()), rushHours);
+      simulation.setDelay(Integer.parseInt(delayField.getText()));
       simulation.start();
     } catch (NumberFormatException e) {
       addDetails("Please use whole numbers and nothing else.");
@@ -59,6 +60,22 @@ public class Controller {
       addDetails(e.toString());
       startBtn.setDisable(false);
     }
+  }
+
+  @FXML
+  private void increaseDelay() {
+    if (simulation == null) {
+      return;
+    }
+    simulation.incDelay();
+  }
+
+  @FXML
+  private void decreaseDelay() {
+    if (simulation == null) {
+      return;
+    }
+    simulation.decDelay();
   }
 
   @FXML
