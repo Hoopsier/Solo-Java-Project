@@ -136,7 +136,7 @@ public class Simulation extends Thread {
    */
   private void customerGenerator() {
     ExponentialDistribution expDist = new ExponentialDistribution(1.0);
-    ExponentialDistribution expDistRush = new ExponentialDistribution(5.0);
+    ExponentialDistribution expDistRush = new ExponentialDistribution(1.5);
 
     for (int i = 0; i < MAXTIME; i++) {
       while (expDist.sample() > 1 && !isRushHour(i)) {
@@ -170,7 +170,7 @@ public class Simulation extends Thread {
         + serviceStartOrEndEvents.countByType(Event.Type.START_SERVICE);
   }
 
-  private boolean isRushHour(int _time) {
+  public synchronized boolean isRushHour(int _time) {
     for (int i : rushHours) {
       if (_time >= i * 60 && _time < (i + 1) * 60)
         return true;

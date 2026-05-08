@@ -94,7 +94,6 @@ public class Controller {
   public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
       if (customersInSystemData != null && customersInSystemData.getData() != null) {
-        System.out.println(customersInSystem + " : " + time);
         XYChart.Data<Number, Number> data = new XYChart.Data<>(time, customersInSystem);
         customersInSystemData.getData().add(data);
       } else {
@@ -105,7 +104,6 @@ public class Controller {
       XYChart.Data<Number, Number> data = new XYChart.Data<>(time, averageServingTime);
       averageServingTimeData.getData().add(data);
       // Log error for average time data
-      dataGraph.getData().forEach((x) -> System.out.println(x.getData()));
     });
   }
 
@@ -123,6 +121,5 @@ public class Controller {
   private void clearGraph() {
     customersInSystemData.getData().clear();
     averageServingTimeData.getData().clear();
-
   }
 }

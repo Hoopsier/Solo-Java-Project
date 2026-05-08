@@ -1,0 +1,106 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64; rv:149.0) Gecko/20100101 Firefox/149.0">
+  <diagram name="Page-1" id="G5YPQhu6BmN3UWFyPbgG">
+    <mxGraphModel dx="1757" dy="1042" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="krbdwnTEkclx_d3rd-aN-28" parent="1" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.polygon;polyCoords=[[0.25,0],[0.75,0],[1,0.25],[1,0.75],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];polyline=0;" value="" vertex="1">
+          <mxGeometry height="37" width="110" x="350" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-30" parent="1" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.polygon;polyCoords=[[0.25,0],[0.75,0],[1,0.25],[1,0.75],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];polyline=0;" value="" vertex="1">
+          <mxGeometry height="37" width="110" x="595" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-32" parent="1" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.polygon;polyCoords=[[0.25,0],[0.75,0],[1,0.25],[1,0.75],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];polyline=0;" value="" vertex="1">
+          <mxGeometry height="37" width="110" x="830" y="588.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-1" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="call router" vertex="1">
+          <mxGeometry height="80" width="120" x="90" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-2" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="5+self" vertex="1">
+          <mxGeometry height="30" width="70" x="80" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-3" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="parallel service points" vertex="1">
+          <mxGeometry height="80" width="140" x="390" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="how many branchings" vertex="1">
+          <mxGeometry height="80" width="110" x="550" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-5" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="3" vertex="1">
+          <mxGeometry height="45" width="40" x="245" y="528" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-6" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="240" y="519.57" as="sourcePoint" />
+            <mxPoint x="310" y="519.57" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-7" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="by language" vertex="1">
+          <mxGeometry height="30" width="60" x="235" y="463" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-8" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Category" vertex="1">
+          <mxGeometry height="80" width="120" x="340" y="487.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-9" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="1+self" vertex="1">
+          <mxGeometry height="30" width="70" x="330" y="432.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-10" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="2" vertex="1">
+          <mxGeometry height="45" width="40" x="500" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-11" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="495" y="536.57" as="sourcePoint" />
+            <mxPoint x="565" y="536.57" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-12" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="by category" vertex="1">
+          <mxGeometry height="30" width="60" x="490" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-13" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Details" vertex="1">
+          <mxGeometry height="80" width="120" x="590" y="495" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-14" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="1+self" vertex="1">
+          <mxGeometry height="30" width="70" x="580" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-15" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="1" vertex="1">
+          <mxGeometry height="45" width="40" x="750" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-16" edge="1" parent="1" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="735" y="536.57" as="sourcePoint" />
+            <mxPoint x="805" y="536.57" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-18" parent="1" style="ellipse;whiteSpace=wrap;html=1;" value="Serving" vertex="1">
+          <mxGeometry height="80" width="120" x="820" y="495" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-19" parent="1" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" value="20+self" vertex="1">
+          <mxGeometry height="30" width="70" x="810" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-20" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Customer served" vertex="1">
+          <mxGeometry height="45" width="140" x="960" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-23" parent="1" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.polygon;polyCoords=[[0.25,0],[0.75,0],[1,0.25],[1,0.75],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];polyline=0;" value="" vertex="1">
+          <mxGeometry height="37" width="110" x="100" y="573" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-24" parent="1" style="verticalLabelPosition=bottom;verticalAlign=top;html=1;shape=mxgraph.basic.polygon;polyCoords=[[0.25,0],[0.75,0],[1,0.25],[1,0.75],[0.75,1],[0.25,1],[0,0.75],[0,0.25]];polyline=0;" value="" vertex="1">
+          <mxGeometry height="37" width="110" x="180" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-25" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Time" vertex="1">
+          <mxGeometry height="30" width="60" x="205" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-26" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="1 min" vertex="1">
+          <mxGeometry height="30" width="60" x="120" y="576.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-27" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="2 min" vertex="1">
+          <mxGeometry height="30" width="60" x="370" y="588.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-29" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="5 min" vertex="1">
+          <mxGeometry height="30" width="60" x="615" y="588.5" as="geometry" />
+        </mxCell>
+        <mxCell id="krbdwnTEkclx_d3rd-aN-31" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="20 min" vertex="1">
+          <mxGeometry height="30" width="60" x="850" y="592" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

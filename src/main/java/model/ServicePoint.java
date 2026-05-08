@@ -19,7 +19,8 @@ public class ServicePoint {
   private int activeTime = 0;
   private final int STARTTIME;
   /// how long the service will take
-  private final int SERVICETIME;
+  private int serviceTime;
+  private final int SERVICETIMEBASE;
   private Set<Integer> reservedTimes = new HashSet<>();
   private Simulation simulation;
   private int[][] branchOdds;
@@ -31,7 +32,8 @@ public class ServicePoint {
 
   public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
     STARTTIME = _simulation.getTime();
-    SERVICETIME = _serviceTime;
+    serviceTime = _serviceTime;
+    SERVICETIMEBASE = _serviceTime;
     branchOdds = _branchOdds;
     setId();
     simulation = _simulation;
@@ -40,7 +42,7 @@ public class ServicePoint {
   public synchronized void setParallels(int quantity) {
     Random random = new Random();
     for (int i = 0; i < quantity; i++) {
-      int parallelServiceTime = Math.max(1, SERVICETIME + random.nextInt(-2, 2));
+      int parallelServiceTime = Math.max(1, serviceTime + random.nextInt(-2, 2));
       parallelPoints
           .add(new ServicePoint(simulation, parallelServiceTime, branchOdds).setParallelId(id));
     }
@@ -74,6 +76,18 @@ public class ServicePoint {
 
   public synchronized void processBEvent(Event event) {
     if (event.getType() == Event.Type.START_SERVICE) {
+      if (simulation.isRushHour(event.getTime())) {
+        serviceTime++;
+        if (serviceTime > SERVICETIMEBASE + 6) {
+          serviceTime = SERVICETIMEBASE + 6;
+        }
+      } else {
+        serviceTime--;
+        if (serviceTime < SERVICETIMEBASE) {
+          serviceTime = SERVICETIMEBASE;
+        }
+      }
+
       startService(event);
       return;
     }
@@ -88,7 +102,7 @@ public class ServicePoint {
     arrived++;
     busy = true;
     reservedTimes.remove(simulation.getTime());
-    busyUntil = simulation.getTime() + SERVICETIME;
+    busyUntil = simulation.getTime() + serviceTime;
     currentCustomerArrivalTime = event.getArrivalTime();
     nextPoint = ServicePointType.getNextService(simulation.getServiceRoot().find(id).getSelf(),
         simulation.getServiceRoot());
@@ -100,7 +114,7 @@ public class ServicePoint {
     served++;
     busy = false;
     reservedTimes.removeIf(reservedTime -> reservedTime <= simulation.getTime());
-    activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
+    activeTime += serviceTime; // second 5 - second 2 = 3 seconds active
     if (isFourth) {
       simulation.addDetails("Phase 4 completed at service point " + id + " at time " + simulation.getTime()
           + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -129,7 +143,7 @@ public class ServicePoint {
       return false;
     }
 
-    for (int reservedTime = time; reservedTime < time + SERVICETIME; reservedTime++) {
+    for (int reservedTime = time; reservedTime < time + serviceTime; reservedTime++) {
       reservedTimes.add(reservedTime);
     }
     return true;

@@ -42,15 +42,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="1082.0" prefWidth="1397.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="548.0" prefWidth="1397.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
   <children>
     <SplitPane dividerPositions="0.2967741935483871, 0.6200716845878136" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
@@ -64,7 +62,7 @@
                 <Color red="0.624" green="0.624" blue="0.624" fx:id="x2" />
               </textFill>
             </Label>
-                  <Button fx:id="startBtn" alignment="BOTTOM_RIGHT" layoutX="339.0" layoutY="459.0" mnemonicParsing="false" onAction="#startSimulation" text="Start">
+                  <Button fx:id="startBtn" alignment="BOTTOM_RIGHT" layoutX="337.0" layoutY="485.0" mnemonicParsing="false" onAction="#startSimulation" text="Start">
                      <tooltip>
                         <Tooltip text="Start the application" />
                      </tooltip>
@@ -99,8 +97,8 @@
                         <Tooltip text="Milliseconds per step" />
                      </tooltip>
                   </Label>
-                  <Button layoutX="187.0" layoutY="459.0" mnemonicParsing="false" onAction="#increaseDelay" text="Increase Delay" />
-                  <Button layoutX="29.0" layoutY="458.0" mnemonicParsing="false" onAction="#decreaseDelay" text="Decrease Delay" />
+                  <Button layoutX="185.0" layoutY="485.0" mnemonicParsing="false" onAction="#increaseDelay" text="Increase Delay" />
+                  <Button layoutX="27.0" layoutY="484.0" mnemonicParsing="false" onAction="#decreaseDelay" text="Decrease Delay" />
                   <Label layoutX="14.0" layoutY="103.0" text="Minutes to run">
                      <tooltip>
                         <Tooltip text="How many time steps that are simulated." />
@@ -123,9 +121,9 @@
                         <Color red="0.624" green="0.624" blue="0.624" fx:id="x211" />
                      </textFill>
                   </Label>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="39.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="452.0" prefWidth="423.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="39.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="493.0" prefWidth="423.0">
                      <content>
-                        <TextFlow lineSpacing="0.2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="450.0" prefWidth="410.0">
+                        <TextFlow lineSpacing="0.2" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="465.0" prefWidth="421.0">
                            <children>
                               <Text fx:id="detailsText" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="379.7362060546875" />
                            </children>
@@ -147,13 +145,5 @@
             </AreaChart>
       </items>
     </SplitPane>
-    <HBox id="HBox" alignment="CENTER_LEFT" prefHeight="591.0" prefWidth="1122.0" spacing="5.0" VBox.vgrow="NEVER">
-      <children>
-        <Pane fx:id="visuals" prefHeight="454.0" prefWidth="1116.0" HBox.hgrow="ALWAYS" />
-      </children>
-      <padding>
-        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-      </padding>
-    </HBox>
   </children>
 </VBox>
