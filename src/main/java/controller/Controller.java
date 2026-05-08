@@ -69,34 +69,27 @@ public class Controller {
     dataGraph.getXAxis().setLabel("Time step");
     dataGraph.getYAxis().setLabel("Count / time steps");
     dataGraph.setCreateSymbols(false);
+    dataGraph.getData()
+        .setAll(Arrays.<XYChart.Series<Number, Number>>asList(averageServingTimeData, customersInSystemData));
     clearGraph();
   }
 
   public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
-      try {
-        if (customersInSystemData != null && customersInSystemData.getData() != null) {
-          System.out.println(customersInSystem + " : " + time);
-          customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
-        } else {
-          System.err.println("customersInSystemData or its data is null");
-        }
-      } catch (Exception e) {
-        System.err.println("Error adding data for time=" + time + ", value=" + customersInSystem);
-        e.printStackTrace(); // Get the full stack trace, not just the message
+      if (customersInSystemData != null && customersInSystemData.getData() != null) {
+        System.out.println(customersInSystem + " : " + time);
+        XYChart.Data<Number, Number> data = new XYChart.Data<>(time, customersInSystem);
+        customersInSystemData.getData().add(data);
+      } else {
+        System.err.println("customersInSystemData or its data is null");
       }
     });
-    return;
-    // Platform.runLater(() -> {
-    // try {
-    // averageServingTimeData.getData().add(new XYChart.Data<>(time,
-    // averageServingTime));
-    // } catch (Exception e) {
-    // // Log error for average time data
-    // System.err.println("this is busted at addData averageTime" + e);
-    // }
-    // });
-
+    Platform.runLater(() -> {
+      XYChart.Data<Number, Number> data = new XYChart.Data<>(time, averageServingTime);
+      averageServingTimeData.getData().add(data);
+      // Log error for average time data
+      dataGraph.getData().forEach((x) -> System.out.println(x.getData()));
+    });
   }
 
   public synchronized void addDetails(String text) {
@@ -114,8 +107,5 @@ public class Controller {
     customersInSystemData.getData().clear();
     averageServingTimeData.getData().clear();
 
-    if (dataGraph != null) {
-      dataGraph.getData().setAll(customersInSystemData, averageServingTimeData);
-    }
   }
 }
