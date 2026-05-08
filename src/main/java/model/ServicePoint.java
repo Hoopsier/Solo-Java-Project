@@ -15,8 +15,6 @@ public class ServicePoint {
   private boolean busy;
   private int arrived = 0;
   private int served = 0;
-  private int customerWaitTime = -1;
-  private List<Integer> customerWait = new ArrayList<>();
   /// delta time time active
   private int activeTime = 0;
   private final int STARTTIME;
@@ -28,6 +26,7 @@ public class ServicePoint {
   private ServicePoint nextPoint;
   private List<ServicePoint> parallelPoints = new ArrayList<>();
   private int busyUntil = 0;
+  private int currentCustomerArrivalTime = -1;
   private boolean isFourth = false;
 
   public ServicePoint(Simulation _simulation, int _serviceTime, int[][] _branchOdds) {
@@ -75,7 +74,7 @@ public class ServicePoint {
 
   public synchronized void processBEvent(Event event) {
     if (event.getType() == Event.Type.START_SERVICE) {
-      startService();
+      startService(event);
       return;
     }
 
@@ -85,11 +84,12 @@ public class ServicePoint {
   }
 
   /** B1, 2 or 3 (start activity) */
-  private void startService() {
+  private void startService(Event event) {
     arrived++;
     busy = true;
     reservedTimes.remove(simulation.getTime());
     busyUntil = simulation.getTime() + SERVICETIME;
+    currentCustomerArrivalTime = event.getArrivalTime();
     nextPoint = ServicePointType.getNextService(simulation.getServiceRoot().find(id).getSelf(),
         simulation.getServiceRoot());
     simulation.scheduleB(new Event(busyUntil, this, Event.Type.END_SERVICE));
@@ -101,7 +101,6 @@ public class ServicePoint {
     busy = false;
     reservedTimes.removeIf(reservedTime -> reservedTime <= simulation.getTime());
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
-    customerWait.add(customerWaitTime + SERVICETIME);
     if (isFourth) {
       simulation.addDetails("Phase 4 completed at service point " + id + " at time " + simulation.getTime()
           + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -109,8 +108,11 @@ public class ServicePoint {
     // TODO: nextPoint is set up, so go to its router's queue
     // sim.addC nextPoint
     if (nextPoint != null) {
-      simulation.scheduleC(new Event(busyUntil, nextPoint));
+      simulation.scheduleC(new Event(busyUntil, nextPoint, Event.Type.ROUTING, currentCustomerArrivalTime));
+    } else {
+      simulation.recordCustomerResponseTime(simulation.getTime() - currentCustomerArrivalTime);
     }
+    currentCustomerArrivalTime = -1;
   }
 
   /** For isActive check, use == 0 */
@@ -159,10 +161,6 @@ public class ServicePoint {
 
   public int getCompletedCustomerCount() {
     return served;
-  }
-
-  public void setWaitTime(int _waitTime) {
-    customerWaitTime = _waitTime;
   }
 
   public int[][] getServiceCount() {

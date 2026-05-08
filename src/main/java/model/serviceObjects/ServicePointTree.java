@@ -1,7 +1,10 @@
 package model.serviceObjects;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Set;
 
 import model.ServicePoint;
 import model.Simulation;
@@ -145,6 +148,29 @@ public class ServicePointTree {
       count += child.getCustomersInSystem();
     }
     return count;
+  }
+
+  public List<ServicePoint> getAllServicePoints() {
+    List<ServicePoint> servicePoints = new ArrayList<>();
+    Set<ServicePoint> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+    collectServicePoints(servicePoints, seen);
+    return servicePoints;
+  }
+
+  private void collectServicePoints(List<ServicePoint> servicePoints, Set<ServicePoint> seen) {
+    addServicePoint(servicePoints, seen, self);
+    for (ServicePoint point : self.getParallels()) {
+      addServicePoint(servicePoints, seen, point);
+    }
+    for (ServicePointTree child : children) {
+      child.collectServicePoints(servicePoints, seen);
+    }
+  }
+
+  private void addServicePoint(List<ServicePoint> servicePoints, Set<ServicePoint> seen, ServicePoint servicePoint) {
+    if (seen.add(servicePoint)) {
+      servicePoints.add(servicePoint);
+    }
   }
 
   public double getAverageServingTime() {

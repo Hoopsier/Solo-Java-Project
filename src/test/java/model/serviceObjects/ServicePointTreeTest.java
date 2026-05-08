@@ -1,5 +1,6 @@
 package model.serviceObjects;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -35,6 +36,13 @@ class ServicePointTreeTest {
     ServicePoint terminalService = categoryRouterNode.getChild(0);
 
     assertNull(ServicePointType.getNextService(terminalService, root));
+  }
+
+  @Test
+  void allServicePointsOnlyIncludesSharedTierFourServicesOnce() {
+    ServicePointTree root = createTree();
+
+    assertEquals(39, root.getAllServicePoints().size());
   }
 
   @Test

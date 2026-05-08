@@ -12,6 +12,7 @@ import controller.Controller;
 import model.phases.APhase;
 import model.phases.BPhase;
 import model.phases.CPhase;
+import model.database.SimulationResultRepository;
 import model.serviceObjects.ServicePointTree;
 
 public class Simulation extends Thread {
@@ -28,6 +29,8 @@ public class Simulation extends Thread {
   private EventQueue routingEvents = new EventQueue();
   private ServicePointTree root;
   private int[] rushHours;
+  private final List<Integer> customerResponseTimes = new ArrayList<>();
+  private final SimulationResultRepository resultRepository = new SimulationResultRepository();
 
   public Simulation(Controller _controller, int _MAXTIME, int[] _rushHours) {
     viewController = _controller;
@@ -68,6 +71,7 @@ public class Simulation extends Thread {
           addDetails("INTERRUPTED: " + e);
         }
       }
+      savePerformanceData();
       addDetails("DONE!!");
     } finally {
       if (viewController != null) {
@@ -140,6 +144,19 @@ public class Simulation extends Thread {
       while (expDistRush.sample() > 1 && isRushHour(i)) {
         scheduleC(new Event(i, root.getSelf()));
       }
+    }
+  }
+
+  public synchronized void recordCustomerResponseTime(int responseTime) {
+    customerResponseTimes.add(responseTime);
+  }
+
+  private void savePerformanceData() {
+    try {
+      resultRepository.save(root.getAllServicePoints(), new ArrayList<>(customerResponseTimes));
+      addDetails("Saved performance data to the database.");
+    } catch (Exception e) {
+      addDetails("Could not save performance data to the database: " + e.getMessage());
     }
   }
 
