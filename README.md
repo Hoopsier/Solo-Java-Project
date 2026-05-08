@@ -3,6 +3,6 @@
 ## How to launch
 
 `Solo-Java-Project/Queries/ 
-$ sudo mariadb
-mariadb[] source Project.sql`
+$ sudo mariadb `
+`mariadb[] source Project.sql`
 `Solo-Java-Project/ $ mvn clean javafx:run`
