@@ -84,7 +84,7 @@ public class Controller {
     averageServingTimeData.setName("Average serving time");
     dataGraph.setTitle("Simulation metrics by time step");
     dataGraph.getXAxis().setLabel("Time step");
-    dataGraph.getYAxis().setLabel("Count / time steps");
+    dataGraph.getYAxis().setLabel("Amount (min or quantity)");
     dataGraph.setCreateSymbols(false);
     dataGraph.getData()
         .setAll(Arrays.<XYChart.Series<Number, Number>>asList(averageServingTimeData, customersInSystemData));
