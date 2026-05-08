@@ -8,8 +8,12 @@ public class BPhase {
   public static String activate(EventQueue BQueue, int time) {
     Event event = BQueue.peek();
     int count = 0;
-    while (event != null && event.getTime() == time) {
+    while (event != null && event.getTime() <= time) {
       BQueue.progress();
+      if (event.getTime() < time) {
+        event = BQueue.peek();
+        continue;
+      }
       ServicePoint service = event.getService();
       service.processBEvent(event);
       count++;

@@ -11,6 +11,7 @@ public class Event implements Comparable<Event> {
   /// for ending service
   private ServicePoint servicePoint;
   private Type type;
+  private boolean inSystem;
 
   public Event(int _time, ServicePoint _servicePoint) {
     this(_time, _servicePoint, Type.ROUTING);
@@ -36,6 +37,14 @@ public class Event implements Comparable<Event> {
 
   public Type getType() {
     return type;
+  }
+
+  public boolean isInSystem(int currentTime) {
+    return inSystem || time <= currentTime;
+  }
+
+  public void setInSystem(boolean _inSystem) {
+    inSystem = _inSystem;
   }
 
   public int compareTo(Event event) {

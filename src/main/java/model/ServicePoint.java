@@ -41,8 +41,9 @@ public class ServicePoint {
   public synchronized void setParallels(int quantity) {
     Random random = new Random();
     for (int i = 0; i < quantity; i++) {
+      int parallelServiceTime = Math.max(1, SERVICETIME + random.nextInt(-2, 2));
       parallelPoints
-          .add(new ServicePoint(simulation, SERVICETIME + random.nextInt(-2, 2), branchOdds).setParallelId(id));
+          .add(new ServicePoint(simulation, parallelServiceTime, branchOdds).setParallelId(id));
     }
   }
 
@@ -98,6 +99,7 @@ public class ServicePoint {
   public void endService() {
     served++;
     busy = false;
+    reservedTimes.removeIf(reservedTime -> reservedTime <= simulation.getTime());
     activeTime += SERVICETIME; // second 5 - second 2 = 3 seconds active
     customerWait.add(customerWaitTime + SERVICETIME);
     if (isFourth) {
@@ -121,12 +123,13 @@ public class ServicePoint {
   }
 
   public synchronized boolean reserveTime(int time) {
-    for (int t : reservedTimes) {
-      if (t == time) {
-        return false;
-      }
+    if (!isAvailableAt(time)) {
+      return false;
     }
-    reservedTimes.add(time);
+
+    for (int reservedTime = time; reservedTime < time + SERVICETIME; reservedTime++) {
+      reservedTimes.add(reservedTime);
+    }
     return true;
   }
 
