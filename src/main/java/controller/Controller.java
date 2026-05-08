@@ -75,17 +75,28 @@ public class Controller {
   public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
       try {
-        customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
+        if (customersInSystemData != null && customersInSystemData.getData() != null) {
+          System.out.println(customersInSystem + " : " + time);
+          customersInSystemData.getData().add(new XYChart.Data<>(time, customersInSystem));
+        } else {
+          System.err.println("customersInSystemData or its data is null");
+        }
       } catch (Exception e) {
-        System.err.println("this is busted at addData customersInSystem" + e);
-      }
-      try {
-        averageServingTimeData.getData().add(new XYChart.Data<>(time, averageServingTime));
-      } catch (Exception e) {
-        // Log error for average time data
-        System.err.println("this is busted at addData averageTime" + e);
+        System.err.println("Error adding data for time=" + time + ", value=" + customersInSystem);
+        e.printStackTrace(); // Get the full stack trace, not just the message
       }
     });
+    return;
+    // Platform.runLater(() -> {
+    // try {
+    // averageServingTimeData.getData().add(new XYChart.Data<>(time,
+    // averageServingTime));
+    // } catch (Exception e) {
+    // // Log error for average time data
+    // System.err.println("this is busted at addData averageTime" + e);
+    // }
+    // });
+
   }
 
   public synchronized void addDetails(String text) {

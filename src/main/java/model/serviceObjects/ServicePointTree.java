@@ -137,9 +137,9 @@ public class ServicePointTree {
   }
 
   public int getCustomersInSystem() {
-    int count = self.getCustomersInSystem();
+    int count = self.isBusy() ? 1 : 0;
     for (ServicePoint point : self.getParallels()) {
-      count += point.getCustomersInSystem();
+      count += point.isBusy() ? 1 : 0;
     }
     for (ServicePointTree child : children) {
       count += child.getCustomersInSystem();
