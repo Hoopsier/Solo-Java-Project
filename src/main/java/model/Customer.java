@@ -9,6 +9,6 @@ public class Customer {
   }
 
   public void setServiceTime(int simTime) {
-    serviceTime = serviceTime - arrivalTime;
+    serviceTime = simTime - arrivalTime;
   }
 }

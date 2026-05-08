@@ -60,7 +60,7 @@ public class Simulation extends Thread {
         addDetails("CQueues passed");
 
         if (viewController != null) {
-          viewController.addData(time, root.getCustomersInSystem(), root.getAverageServingTime());
+          viewController.addData(time, getCustomersInSystem(), root.getAverageServingTime());
         }
         try {
           Thread.sleep(50);
@@ -89,22 +89,24 @@ public class Simulation extends Thread {
     return nextTime;
   }
 
-  private synchronized void scheduleA(int time) {
-    if (time < this.time) {
-      return;
-    }
+  private synchronized int normalizeScheduledTime(int scheduledTime) {
+    return Math.max(scheduledTime, this.time);
+  }
 
-    timeAdvanceSet.add(time);
+  private synchronized void scheduleA(int time) {
+    timeAdvanceSet.add(normalizeScheduledTime(time));
     sortedTimeAdvanceSet = new ArrayList<>(timeAdvanceSet);
     Collections.sort(sortedTimeAdvanceSet);
   }
 
   public synchronized void scheduleB(Event event) {
+    event.setTime(normalizeScheduledTime(event.getTime()));
     scheduleA(event.getTime());
     serviceStartOrEndEvents.addToQueue(event);
   }
 
   public synchronized void scheduleC(Event event) {
+    event.setTime(normalizeScheduledTime(event.getTime()));
     scheduleA(event.getTime());
     routingEvents.addToQueue(event);
   }
@@ -141,9 +143,18 @@ public class Simulation extends Thread {
     }
   }
 
+  public synchronized int getCustomersInSystem() {
+    if (root == null) {
+      return 0;
+    }
+    return root.getCustomersInSystem()
+        + routingEvents.countRoutingsInSystem(time)
+        + serviceStartOrEndEvents.countByType(Event.Type.START_SERVICE);
+  }
+
   private boolean isRushHour(int _time) {
     for (int i : rushHours) {
-      if (_time < i && _time >= i)
+      if (_time >= i * 60 && _time < (i + 1) * 60)
         return true;
     }
     return false;

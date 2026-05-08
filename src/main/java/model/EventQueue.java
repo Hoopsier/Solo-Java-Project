@@ -27,4 +27,24 @@ public class EventQueue {
   public synchronized void addToQueue(Event event) {
     eventQueue.add(event);
   }
+
+  public synchronized int countByType(Event.Type type) {
+    int count = 0;
+    for (Event event : eventQueue) {
+      if (event.getType() == type) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  public synchronized int countRoutingsInSystem(int currentTime) {
+    int count = 0;
+    for (Event event : eventQueue) {
+      if (event.getType() == Event.Type.ROUTING && event.isInSystem(currentTime)) {
+        count++;
+      }
+    }
+    return count;
+  }
 }
