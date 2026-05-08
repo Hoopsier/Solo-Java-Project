@@ -12,15 +12,21 @@ public class Event implements Comparable<Event> {
   private ServicePoint servicePoint;
   private Type type;
   private boolean inSystem;
+  private final int arrivalTime;
 
   public Event(int _time, ServicePoint _servicePoint) {
     this(_time, _servicePoint, Type.ROUTING);
   }
 
   public Event(int _time, ServicePoint _servicePoint, Type _type) {
+    this(_time, _servicePoint, _type, _time);
+  }
+
+  public Event(int _time, ServicePoint _servicePoint, Type _type, int _arrivalTime) {
     time = _time;
     servicePoint = _servicePoint;
     type = _type;
+    arrivalTime = _arrivalTime;
   }
 
   public synchronized int getTime() {
@@ -33,6 +39,10 @@ public class Event implements Comparable<Event> {
 
   public ServicePoint getService() {
     return servicePoint;
+  }
+
+  public int getArrivalTime() {
+    return arrivalTime;
   }
 
   public Type getType() {
