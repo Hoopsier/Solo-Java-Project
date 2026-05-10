@@ -1,0 +1,15 @@
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/controller/Controller.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/controller/Detailinator.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/Customer.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/Event.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/EventQueue.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/PhaseQueue.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/ServicePoint.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/Simulation.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/database/SimulationResultRepository.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/phases/APhase.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/phases/BPhase.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/phases/CPhase.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/serviceObjects/ServicePointTree.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/model/serviceObjects/ServicePointType.java
+/home/Hoopsy/Code-Uni/Java/Solo-Java-Project/src/main/java/view/App.java
