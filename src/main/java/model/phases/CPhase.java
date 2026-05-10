@@ -6,7 +6,21 @@ import model.ServicePoint;
 import model.Simulation;
 import model.serviceObjects.ServicePointType;
 
+/**
+ * Phase C of the simulation, responsible for routing waiting customers to an
+ * available service point or rescheduling them when all parallels are busy.
+ */
 public class CPhase {
+  /**
+   * Processes routing events that are due at or before the supplied time.
+   *
+   * @param CQueue queue containing routing events
+   * @param simulation simulation used to reschedule events and enqueue service
+   *        starts
+   * @param time current simulation time
+   * @return {@code true} if at least one routing event was touched; otherwise
+   *         {@code false}
+   */
   public static synchronized boolean activate(EventQueue CQueue, Simulation simulation, int time) {
     CQueue.readQueue(time);
     boolean touched = false;

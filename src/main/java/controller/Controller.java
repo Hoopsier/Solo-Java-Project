@@ -11,6 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import model.Simulation;
 
+/**
+ * JavaFX controller for the simulation UI, including input parsing, graph
+ * updates, delay controls, and status text updates.
+ */
 public class Controller {
   private Simulation simulation;
 
@@ -38,6 +42,9 @@ public class Controller {
   @FXML
   private Button startBtn;
 
+  /**
+   * Parses the UI inputs, creates a simulation, and starts it on its own thread.
+   */
   @FXML
   private void startSimulation() {
     clearGraph();
@@ -62,6 +69,9 @@ public class Controller {
     }
   }
 
+  /**
+   * Increases the running simulation's tick delay.
+   */
   @FXML
   private void increaseDelay() {
     if (simulation == null) {
@@ -70,6 +80,9 @@ public class Controller {
     simulation.incDelay();
   }
 
+  /**
+   * Decreases the running simulation's tick delay.
+   */
   @FXML
   private void decreaseDelay() {
     if (simulation == null) {
@@ -78,6 +91,10 @@ public class Controller {
     simulation.decDelay();
   }
 
+  /**
+   * Initializes chart labels, series names, and default graph state after FXML
+   * loading.
+   */
   @FXML
   private void initialize() {
     customersInSystemData.setName("Customers in system");
@@ -91,6 +108,13 @@ public class Controller {
     clearGraph();
   }
 
+  /**
+   * Adds a data point for both graph series on the JavaFX application thread.
+   *
+   * @param time simulation time of the data point
+   * @param customersInSystem number of customers currently in the system
+   * @param averageServingTime average completed serving time
+   */
   public synchronized void addData(int time, int customersInSystem, double averageServingTime) {
     Platform.runLater(() -> {
       if (customersInSystemData != null && customersInSystemData.getData() != null) {
@@ -107,17 +131,31 @@ public class Controller {
     });
   }
 
+  /**
+   * Appends detail text to the UI details log on the JavaFX application thread.
+   *
+   * @param text detail text to display
+   */
   public synchronized void addDetails(String text) {
     Platform.runLater(() -> detailsText.setText(Detailinator.parse(text + "\n", detailsText.getText())));
   }
 
+  /**
+   * Re-enables the start button after a simulation stops or fails.
+   */
   public void enableButton() {
     Platform.runLater(() -> startBtn.setDisable(false));
   }
 
+  /**
+   * Creates a controller instance for JavaFX or tests.
+   */
   public Controller() {
   }
 
+  /**
+   * Clears all graph data series.
+   */
   private void clearGraph() {
     customersInSystemData.getData().clear();
     averageServingTimeData.getData().clear();
