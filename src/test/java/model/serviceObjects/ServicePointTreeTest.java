@@ -9,8 +9,13 @@ import org.junit.jupiter.api.Test;
 import model.ServicePoint;
 import model.Simulation;
 
-// AI generated test, AFTER I made the stuff... Don't blame me for the shit names here
+/**
+ * Unit tests for service-point tree construction and routing behavior.
+ */
 class ServicePointTreeTest {
+  /**
+   * Verifies that category router nodes expose both category child outcomes.
+   */
   @Test
   void categoryRouterHasChildrenForBothCategoryOutcomes() {
     ServicePointTree root = createTree();
@@ -26,6 +31,9 @@ class ServicePointTreeTest {
     assertNotNull(secondCategory);
   }
 
+  /**
+   * Verifies that terminal service points do not route to another node.
+   */
   @Test
   void terminalServiceDoesNotRoutePastTheEndOfTheTree() {
     ServicePointTree root = createTree();
@@ -38,6 +46,10 @@ class ServicePointTreeTest {
     assertNull(ServicePointType.getNextService(terminalService, root));
   }
 
+  /**
+   * Verifies that the shared tier-four branch is only returned once in the list
+   * of all service points.
+   */
   @Test
   void allServicePointsOnlyIncludesSharedTierFourServicesOnce() {
     ServicePointTree root = createTree();
@@ -45,6 +57,9 @@ class ServicePointTreeTest {
     assertEquals(39, root.getAllServicePoints().size());
   }
 
+  /**
+   * Verifies that constructing a new tree resets stale tier-four state.
+   */
   @Test
   void buildingASecondTreeDoesNotReuseMissingTierFourBranch() {
     ServicePointTree firstTree = createTree();
@@ -56,6 +71,11 @@ class ServicePointTreeTest {
     secondTree.serviceTotalCount();
   }
 
+  /**
+   * Creates a complete service-point tree for tests.
+   *
+   * @return root service-point tree
+   */
   private ServicePointTree createTree() {
     Simulation simulation = new Simulation(null, 10, new int[] {});
     int[][] rootBranchOdds = { { 33, 0 }, { 66, 1 }, { 100, 2 } };

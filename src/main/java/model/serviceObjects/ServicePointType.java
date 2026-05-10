@@ -1,21 +1,24 @@
 package model.serviceObjects;
 
-import java.util.Arrays;
-
 import model.ServicePoint;
 
-/// Sorry for the bad naming scheme, but I don't want to waste any more time refactoring rn.
+/**
+ * Routing helper methods for choosing child and parallel service points.
+ */
 public class ServicePointType {
 
+  /**
+   * Rolls against a cumulative integer distribution.
+   *
+   * @param numberDistribution rows of {@code [threshold, returnValue]}
+   * @return selected return value, or {@code -1} when the distribution is empty
+   */
   private static synchronized int roll(int[][] numberDistribution) {
     if (numberDistribution.length == 0) {
       return -1;
     }
 
     int x = (int) (Math.random() * 100) + 1; // generate a random number 1..100 -> we get the row which gives the age
-    // System.out.println(numberDistribution.length);
-    // Arrays.stream(numberDistribution).forEach(nd ->
-    // System.out.println(Arrays.toString(nd)));
     for (int[] row : numberDistribution) {
       if (x <= row[0]) {
         return row[1];
@@ -25,9 +28,12 @@ public class ServicePointType {
   }
 
   /**
-   * Router tool to get the availible parallel
-   * 
-   * @return ServicePoint to queue to, or null if everything is busy
+   * Chooses an available parallel service point under the next routed child.
+   *
+   * @param service current service point whose routing table is used
+   * @param root root of the service-point tree
+   * @return service point to queue to, or {@code null} when no routed parallel is
+   *         available
    */
   public static synchronized ServicePoint getNextParallel(ServicePoint service, ServicePointTree root) {
     ServicePointTree current = root.find(service.getSPId());
@@ -54,6 +60,12 @@ public class ServicePointType {
     return parallel;
   }
 
+  /**
+   * Chooses the current service point or one of its parallels if available now.
+   *
+   * @param service preferred service point
+   * @return available service point, or {@code null} when all parallels are busy
+   */
   public static synchronized ServicePoint getCurrentParallel(ServicePoint service) {
     if (service.isActive() >= 0) {
       return service;
@@ -69,6 +81,15 @@ public class ServicePointType {
     return parallel;
   }
 
+  /**
+   * Chooses the current service point or one of its parallels if available at a
+   * future time.
+   *
+   * @param service preferred service point
+   * @param time simulation time to inspect
+   * @return available service point, or {@code null} when all parallels are
+   *         unavailable at that time
+   */
   public static synchronized ServicePoint getCurrentParallel(ServicePoint service, int time) {
     if (service.isAvailableAt(time)) {
       return service;
@@ -85,13 +106,15 @@ public class ServicePointType {
   }
 
   /**
-   * Lighter version of the parallel lookup
-   * This one is to get the next router to go to
-   * 
-   * @return the branching service point for the next queue
+   * Chooses the next child router/service point using the current service
+   * point's routing table.
+   *
+   * @param service current service point
+   * @param root root of the service-point tree
+   * @return branching service point for the next queue, or {@code null} at a
+   *         terminal node
    */
   public static synchronized ServicePoint getNextService(ServicePoint service, ServicePointTree root) {
-    // TODO: route nextpoint with tree lookup
     ServicePointTree current = root.find(service.getSPId());
     if (current == null || !current.hasChildren()) {
       return null;

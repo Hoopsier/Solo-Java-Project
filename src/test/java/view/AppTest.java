@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit test for simple App.
+ * Smoke tests for the JavaFX application module.
  */
 public class AppTest {
 
     /**
-     * Rigorous Test :-)
+     * Verifies that the test suite can execute a basic assertion.
      */
     @Test
     public void shouldAnswerWithTrue() {
